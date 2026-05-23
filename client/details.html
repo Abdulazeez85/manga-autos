@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title id="pageTitle">Vehicle Details — Manga Autos</title>
+  <meta name="description" id="pageDesc" content="View full details, specs and photos for this premium vehicle at Manga Autos, Abuja.">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="/css/main.css">
+  <style>
+    .details-layout {
+      display: grid;
+      grid-template-columns: 1fr 420px;
+      gap: 3rem;
+      align-items: start;
+    }
+    /* Gallery */
+    .gallery-main {
+      aspect-ratio: 16/10;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      position: relative;
+      cursor: zoom-in;
+    }
+    .gallery-main-img {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, var(--bg-elevated), var(--bg-secondary));
+    }
+    .gallery-thumbs {
+      display: flex;
+      gap: 0.75rem;
+      margin-top: 0.75rem;
+      overflow-x: auto;
+      padding-bottom: 0.25rem;
+    }
+    .gallery-thumb {
+      width: 80px;
+      height: 60px;
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      border: 2px solid transparent;
+      cursor: pointer;
+      flex-shrink: 0;
+      background: var(--bg-elevated);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all var(--transition);
+    }
+    .gallery-thumb.active { border-color: var(--gold); }
+    .gallery-thumb:hover { border-color: rgba(201,168,76,0.5); }
+    .gallery-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: rgba(10,10,10,0.75);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all var(--transition);
+      z-index: 2;
+    }
+    .gallery-nav:hover { background: var(--gold); color: #000; }
+    .gallery-nav.prev { left: 1rem; }
+    .gallery-nav.next { right: 1rem; }
+    /* Sticky sidebar */
+    .details-sidebar {
+      position: sticky;
+      top: calc(var(--nav-height) + 1.5rem);
+    }
+    .sidebar-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-xl);
+      padding: 2rem;
+      margin-bottom: 1.5rem;
+    }
+    .sidebar-card:first-child {
+      border-color: var(--border);
+    }
+    .specs-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+    }
+    .spec-cell {
+      padding: 0.875rem 0;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .spec-cell:nth-last-child(-n+2) { border-bottom: none; }
+    .spec-key {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      margin-bottom: 0.25rem;
+    }
+    .spec-value {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+    .features-list {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.625rem;
+    }
+    .feature-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+    }
+    .feature-item::before {
+      content: '✦';
+      color: var(--gold);
+      font-size: 0.6rem;
+      flex-shrink: 0;
+    }
+    /* Lightbox */
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.96);
+      z-index: 2000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+    .lightbox.open { display: flex; }
+    .lightbox-close {
+      position: absolute;
+      top: 1.5rem;
+      right: 1.5rem;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 1.25rem;
+      cursor: pointer;
+    }
+    .lightbox-img {
+      max-width: 90vw;
+      max-height: 85vh;
+      object-fit: contain;
+      border-radius: var(--radius-md);
+    }
+    /* Related */
+    .related-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+    /* Actions bar mobile */
+    .mobile-actions-bar {
+      display: none;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 800;
+      background: var(--bg-card);
+      border-top: 1px solid var(--border-subtle);
+      padding: 1rem clamp(1.5rem,5vw,3rem);
+      gap: 1rem;
+    }
+    @media (max-width: 1024px) {
+      .details-layout { grid-template-columns: 1fr; }
+      .details-sidebar { position: static; }
+      .related-grid { grid-template-columns: 1fr 1fr; }
+      .mobile-actions-bar { display: flex; }
+    }
+    @media (max-width: 640px) {
+      .features-list { grid-template-columns: 1fr; }
+      .related-grid { grid-template-columns: 1fr; }
+      .specs-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+<div class="page-loader" id="pageLoader">
+  <div class="loader-logo">MANGA AUTOS</div>
+  <div class="loader-bar"></div>
+</div>
+
+<a href="https://wa.me/2348012345678" class="whatsapp-float" target="_blank">
+  <i class="fab fa-whatsapp"></i>
+</a>
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+  <div style="position:relative;">
+    <button class="gallery-nav prev" style="position:absolute;left:-60px;top:50%;transform:translateY(-50%);" onclick="event.stopPropagation();lightboxNav(-1)"><i class="fas fa-chevron-left"></i></button>
+    <div class="lightbox-img" id="lightboxContent"></div>
+    <button class="gallery-nav next" style="position:absolute;right:-60px;top:50%;transform:translateY(-50%);" onclick="event.stopPropagation();lightboxNav(1)"><i class="fas fa-chevron-right"></i></button>
+  </div>
+</div>
+
+<!-- NAVBAR -->
+<nav class="navbar scrolled" id="navbar">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">
+      <span class="nav-logo-text">MANGA AUTOS</span>
+      <span class="nav-logo-sub">Luxury Automotive · Abuja</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/" class="nav-link">Home</a></li>
+      <li><a href="/inventory" class="nav-link active">Inventory</a></li>
+      <li><a href="/about" class="nav-link">About</a></li>
+      <li><a href="/contact" class="nav-link">Contact</a></li>
+    </ul>
+    <div class="nav-actions">
+      <button class="theme-toggle" id="themeToggle"><i class="fas fa-sun"></i></button>
+      <button class="wishlist-btn" title="Wishlist">
+        <i class="fas fa-heart"></i>
+        <span class="wishlist-count" id="wishlistCount">0</span>
+      </button>
+      <a href="https://wa.me/2348012345678" target="_blank" class="nav-cta">
+        <i class="fab fa-whatsapp"></i> WhatsApp Us
+      </a>
+    </div>
+    <button class="mobile-menu-btn" id="menuBtn"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <nav class="mobile-nav-links">
+    <a href="/" class="mobile-nav-link">Home</a>
+    <a href="/inventory" class="mobile-nav-link">Inventory</a>
+    <a href="/about" class="mobile-nav-link">About</a>
+    <a href="/contact" class="mobile-nav-link">Contact</a>
+  </nav>
+</div>
+
+<!-- MAIN CONTENT -->
+<div style="padding-top:var(--nav-height);">
+  <!-- Loading state -->
+  <div id="detailsLoading" style="padding:8rem 2rem;text-align:center;">
+    <div class="loader-bar" style="width:200px;margin:0 auto 1rem;"></div>
+    <p style="color:var(--text-muted);font-size:0.875rem;">Loading vehicle details...</p>
+  </div>
+
+  <!-- Details content (hidden until loaded) -->
+  <div id="detailsContent" style="display:none;">
+    <!-- Breadcrumb -->
+    <div style="padding:1.5rem clamp(1.5rem,5vw,3rem);background:var(--bg-secondary);border-bottom:1px solid var(--border-subtle);">
+      <div class="container" style="display:flex;align-items:center;gap:0.5rem;font-size:0.8rem;color:var(--text-muted);">
+        <a href="/" style="color:var(--text-muted);" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='var(--text-muted)'">Home</a>
+        <span>/</span>
+        <a href="/inventory" style="color:var(--text-muted);" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='var(--text-muted)'">Inventory</a>
+        <span>/</span>
+        <span style="color:var(--text-primary);" id="breadcrumbName">Vehicle</span>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="container">
+        <div class="details-layout">
+
+          <!-- LEFT: Gallery + Info -->
+          <div>
+            <!-- Vehicle Header (mobile) -->
+            <div style="margin-bottom:1.5rem;">
+              <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:0.5rem;">
+                <span class="badge badge-gold" id="detailCondition">Foreign Used</span>
+                <span style="font-size:0.7rem;color:var(--text-muted);font-family:var(--font-mono);" id="detailViews">0 views</span>
+              </div>
+              <h1 style="font-family:var(--font-display);font-size:clamp(1.75rem,4vw,3rem);font-weight:400;color:var(--text-primary);margin-bottom:0.5rem;" id="detailName">Vehicle Name</h1>
+              <div style="display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap;">
+                <span style="font-family:var(--font-display);font-size:2rem;color:var(--gold);" id="detailPrice">₦0</span>
+                <span style="font-size:0.8rem;color:var(--text-muted);" id="detailYear">2023 · Abuja</span>
+              </div>
+            </div>
+
+            <!-- Gallery -->
+            <div class="gallery-main" id="galleryMain" onclick="openLightbox(currentGalleryIndex)">
+              <div class="gallery-main-img" id="galleryMainImg">
+                <!-- Car SVG placeholder -->
+                <svg width="200" height="120" viewBox="0 0 200 120" fill="none" opacity="0.15">
+                  <path d="M20 75 L40 75 L50 50 L70 35 L130 35 L150 50 L180 50 L190 75 L195 75" stroke="#C9A84C" stroke-width="2.5" stroke-linejoin="round"/>
+                  <path d="M72 35 L75 55 L130 55 L128 35" stroke="#C9A84C" stroke-width="1.5"/>
+                  <circle cx="55" cy="82" r="15" stroke="#C9A84C" stroke-width="2"/>
+                  <circle cx="55" cy="82" r="6" stroke="#C9A84C" stroke-width="1.5"/>
+                  <circle cx="150" cy="82" r="15" stroke="#C9A84C" stroke-width="2"/>
+                  <circle cx="150" cy="82" r="6" stroke="#C9A84C" stroke-width="1.5"/>
+                </svg>
+              </div>
+              <button class="gallery-nav prev" onclick="event.stopPropagation();changeGallery(-1)"><i class="fas fa-chevron-left"></i></button>
+              <button class="gallery-nav next" onclick="event.stopPropagation();changeGallery(1)"><i class="fas fa-chevron-right"></i></button>
+              <div id="galleryCounter" style="position:absolute;bottom:1rem;right:1rem;background:rgba(0,0,0,0.7);padding:0.375rem 0.75rem;border-radius:var(--radius-pill);font-size:0.75rem;color:#fff;font-family:var(--font-mono);">1/1</div>
+            </div>
+            <div class="gallery-thumbs" id="galleryThumbs"></div>
+
+            <!-- Quick actions -->
+            <div style="display:flex;gap:0.75rem;margin-top:1.25rem;flex-wrap:wrap;">
+              <button class="btn btn-ghost btn-sm" id="wishlistToggleBtn" onclick="toggleWishlist()">
+                <i class="far fa-heart"></i> Save to Wishlist
+              </button>
+              <button class="btn btn-ghost btn-sm" onclick="shareVehicle()">
+                <i class="fas fa-share-alt"></i> Share
+              </button>
+              <button class="btn btn-ghost btn-sm" onclick="Comparison.add(currentVehicle.id)">
+                <i class="fas fa-exchange-alt"></i> Compare
+              </button>
+            </div>
+
+            <!-- Description -->
+            <div style="margin-top:2.5rem;padding-top:2rem;border-top:1px solid var(--border-subtle);">
+              <h2 style="font-family:var(--font-display);font-size:1.75rem;margin-bottom:1rem;">About This Vehicle</h2>
+              <p style="color:var(--text-secondary);line-height:1.8;font-size:0.9375rem;" id="detailDescription">Loading...</p>
+            </div>
+
+            <!-- Specifications -->
+            <div style="margin-top:2.5rem;padding-top:2rem;border-top:1px solid var(--border-subtle);">
+              <h2 style="font-family:var(--font-display);font-size:1.75rem;margin-bottom:1.5rem;">Specifications</h2>
+              <div class="specs-grid" id="specsGrid"></div>
+            </div>
+
+            <!-- Features -->
+            <div style="margin-top:2.5rem;padding-top:2rem;border-top:1px solid var(--border-subtle);">
+              <h2 style="font-family:var(--font-display);font-size:1.75rem;margin-bottom:1.5rem;">Features & Equipment</h2>
+              <div class="features-list" id="featuresList"></div>
+            </div>
+
+            <!-- Financing Calculator (inline) -->
+            <div style="margin-top:2.5rem;padding-top:2rem;border-top:1px solid var(--border-subtle);">
+              <h2 style="font-family:var(--font-display);font-size:1.75rem;margin-bottom:1.5rem;">Financing Estimate</h2>
+              <div class="calculator" id="loanCalculator">
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;">
+                  <div class="form-group">
+                    <div style="display:flex;justify-content:space-between;margin-bottom:0.5rem;">
+                      <label class="form-label">Down Payment</label>
+                      <span style="font-size:0.875rem;color:var(--gold);" id="calcDownDisplay">₦0</span>
+                    </div>
+                    <input type="range" id="calcDown" min="0" max="100000000" value="20000000" step="1000000" oninput="Calculator.calculate()">
+                  </div>
+                  <div class="form-group">
+                    <div style="display:flex;justify-content:space-between;margin-bottom:0.5rem;">
+                      <label class="form-label">Interest Rate</label>
+                      <span style="font-size:0.875rem;color:var(--gold);" id="calcRateDisplay">15%</span>
+                    </div>
+                    <input type="range" id="calcRate" min="5" max="30" value="15" step="0.5" oninput="Calculator.calculate()">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div style="display:flex;justify-content:space-between;margin-bottom:0.5rem;">
+                    <label class="form-label">Loan Duration</label>
+                    <span style="font-size:0.875rem;color:var(--gold);" id="calcMonthsDisplay">48 mo</span>
+                  </div>
+                  <input type="range" id="calcMonths" min="12" max="60" value="48" step="6" oninput="Calculator.calculate()">
+                </div>
+                <div class="calculator-result">
+                  <div style="font-size:0.65rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-muted);margin-bottom:0.5rem;">Estimated Monthly Payment</div>
+                  <div class="calc-monthly" id="calcMonthly">₦0</div>
+                  <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:1rem;padding-top:1rem;border-top:1px solid var(--border-subtle);">
+                    <div style="text-align:center;">
+                      <div style="font-size:0.65rem;color:var(--text-muted);text-transform:uppercase;margin-bottom:0.25rem;">Total Payable</div>
+                      <div style="font-family:var(--font-display);font-size:1.1rem;" id="calcTotal">₦0</div>
+                    </div>
+                    <div style="text-align:center;">
+                      <div style="font-size:0.65rem;color:var(--text-muted);text-transform:uppercase;margin-bottom:0.25rem;">Interest</div>
+                      <div style="font-family:var(--font-display);font-size:1.1rem;color:var(--text-secondary);" id="calcInterest">₦0</div>
+                    </div>
+                  </div>
+                  <p style="font-size:0.7rem;color:var(--text-muted);margin-top:0.75rem;">*Estimates only. Subject to bank approval.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- RIGHT: Sticky Sidebar -->
+          <div class="details-sidebar">
+            <!-- Price Card -->
+            <div class="sidebar-card">
+              <div style="font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-muted);margin-bottom:0.25rem;">Asking Price</div>
+              <div style="font-family:var(--font-display);font-size:2.5rem;font-weight:600;color:var(--gold);line-height:1;margin-bottom:0.5rem;" id="sidebarPrice">₦0</div>
+              <div style="font-size:0.8rem;color:var(--text-muted);margin-bottom:1.5rem;">Negotiable · Financing Available</div>
+
+              <!-- Primary Actions -->
+              <div style="display:flex;flex-direction:column;gap:0.75rem;">
+                <a id="whatsappBtn" href="#" target="_blank" class="btn btn-whatsapp btn-lg" style="justify-content:center;">
+                  <i class="fab fa-whatsapp"></i> Inquire on WhatsApp
+                </a>
+                <a href="tel:+2348012345678" class="btn btn-primary btn-lg" style="justify-content:center;">
+                  <i class="fas fa-phone"></i> Call Now: 0801 234 5678
+                </a>
+                <button onclick="openInquiryModal()" class="btn btn-outline btn-lg" style="justify-content:center;">
+                  <i class="fas fa-envelope"></i> Send Inquiry
+                </button>
+              </div>
+
+              <div style="display:flex;gap:0.75rem;margin-top:1rem;">
+                <button class="btn btn-ghost btn-sm" id="wishlistSideBtn" onclick="toggleWishlist()">
+                  <i class="far fa-heart"></i> Wishlist
+                </button>
+                <button class="btn btn-ghost btn-sm" onclick="shareVehicle()">
+                  <i class="fas fa-share-alt"></i> Share
+                </button>
+              </div>
+            </div>
+
+            <!-- Quick Specs Card -->
+            <div class="sidebar-card">
+              <div class="label" style="margin-bottom:1rem;">Quick Overview</div>
+              <div style="display:flex;flex-direction:column;gap:0;" id="quickSpecs"></div>
+            </div>
+
+            <!-- Contact Card -->
+            <div class="sidebar-card" style="background:rgba(201,168,76,0.05);border-color:rgba(201,168,76,0.2);">
+              <div class="label" style="margin-bottom:0.75rem;">Need More Info?</div>
+              <p style="font-size:0.8rem;color:var(--text-secondary);margin-bottom:1.25rem;line-height:1.6;">Our automotive experts are available Mon–Sat 8am–6pm. Message us on WhatsApp for the fastest response.</p>
+              <div style="display:flex;flex-direction:column;gap:0.5rem;font-size:0.8rem;color:var(--text-secondary);">
+                <div style="display:flex;align-items:center;gap:0.625rem;"><i class="fas fa-phone" style="color:var(--gold);width:14px;"></i> +234 801 234 5678</div>
+                <div style="display:flex;align-items:center;gap:0.625rem;"><i class="fas fa-envelope" style="color:var(--gold);width:14px;"></i> hello@mangaautos.ng</div>
+                <div style="display:flex;align-items:center;gap:0.625rem;"><i class="fas fa-map-marker-alt" style="color:var(--gold);width:14px;"></i> 15 Gana St, Maitama, Abuja</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RELATED VEHICLES -->
+    <section class="section" style="background:var(--bg-secondary);">
+      <div class="container">
+        <div class="section-header">
+          <div class="section-label"><span class="label">More Options</span></div>
+          <h2 class="display-lg">Related <em style="font-style:italic;color:var(--gold);">Vehicles</em></h2>
+          <div class="divider"></div>
+        </div>
+        <div class="related-grid" id="relatedGrid">
+          <div class="skeleton" style="height:380px;border-radius:var(--radius-lg);"></div>
+          <div class="skeleton" style="height:380px;border-radius:var(--radius-lg);"></div>
+          <div class="skeleton" style="height:380px;border-radius:var(--radius-lg);"></div>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<!-- INQUIRY MODAL -->
+<div id="inquiryModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:2000;display:none;align-items:center;justify-content:center;padding:2rem;">
+  <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-xl);padding:2.5rem;max-width:500px;width:100%;max-height:90vh;overflow-y:auto;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2rem;">
+      <h2 style="font-family:var(--font-display);font-size:1.75rem;">Send Inquiry</h2>
+      <button onclick="closeInquiryModal()" style="color:var(--text-muted);font-size:1.5rem;background:none;border:none;cursor:pointer;">✕</button>
+    </div>
+    <form id="inquiryForm" style="display:flex;flex-direction:column;gap:1.25rem;">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+        <div class="form-group">
+          <label class="form-label">Full Name *</label>
+          <input type="text" class="form-control" id="inquiryName" required placeholder="Your name">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Phone *</label>
+          <input type="tel" class="form-control" id="inquiryPhone" required placeholder="+234...">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Email</label>
+        <input type="email" class="form-control" id="inquiryEmail" placeholder="your@email.com">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Message</label>
+        <textarea class="form-control" id="inquiryMessage" rows="4" placeholder="I'm interested in this vehicle and would like to know more..."></textarea>
+      </div>
+      <div style="display:flex;gap:1rem;">
+        <button type="submit" class="btn btn-primary btn-lg" style="flex:1;justify-content:center;">Send Inquiry</button>
+        <button type="button" onclick="closeInquiryModal()" class="btn btn-outline">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- MOBILE ACTIONS BAR -->
+<div class="mobile-actions-bar" id="mobileActionsBar">
+  <div style="flex:1;">
+    <div style="font-size:0.65rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.08em;">Price</div>
+    <div style="font-family:var(--font-display);font-size:1.5rem;color:var(--gold);" id="mobilePriceBar">₦0</div>
+  </div>
+  <a id="mobileWhatsAppBtn" href="#" target="_blank" class="btn btn-whatsapp" style="flex:1;justify-content:center;">
+    <i class="fab fa-whatsapp"></i> Inquire
+  </a>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-grid">
+    <div>
+      <div class="footer-logo">MANGA AUTOS</div>
+      <div class="footer-tagline">Premium Automotive · Abuja, Nigeria</div>
+      <p class="footer-desc">Abuja's most trusted luxury automotive dealership.</p>
+    </div>
+    <div>
+      <div class="footer-heading">Navigation</div>
+      <div class="footer-links">
+        <a href="/" class="footer-link">Home</a>
+        <a href="/inventory" class="footer-link">Inventory</a>
+        <a href="/about" class="footer-link">About</a>
+        <a href="/contact" class="footer-link">Contact</a>
+      </div>
+    </div>
+    <div>
+      <div class="footer-heading">Contact</div>
+      <div class="footer-contact-item"><i class="fas fa-phone footer-contact-icon"></i><span>+234 801 234 5678</span></div>
+      <div class="footer-contact-item"><i class="fas fa-envelope footer-contact-icon"></i><span>hello@mangaautos.ng</span></div>
+    </div>
+    <div>
+      <div class="footer-heading">Services</div>
+      <div class="footer-links">
+        <a href="#" class="footer-link">Vehicle Sourcing</a>
+        <a href="#" class="footer-link">Inspection</a>
+        <a href="#" class="footer-link">Financing</a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-copy">© 2024 Manga Autos. All rights reserved.</span>
+  </div>
+</footer>
+
+<script src="/js/core.js"></script>
+<script>
+let currentVehicle = null;
+let currentGalleryIndex = 0;
+const galleryImages = [];
+
+async function loadVehicle() {
+  const id = new URLSearchParams(window.location.search).get('id');
+  if (!id) {
+    window.location.href = '/inventory';
+    return;
+  }
+
+  try {
+    const vehicle = await API.get(`/vehicles/${id}`);
+    currentVehicle = vehicle;
+    renderVehicle(vehicle);
+    loadRelated(vehicle.brand, vehicle.id);
+    document.getElementById('detailsLoading').style.display = 'none';
+    document.getElementById('detailsContent').style.display = 'block';
+    // Set calculator price
+    const downInput = document.getElementById('calcDown');
+    if (downInput) {
+      downInput.max = vehicle.price;
+      downInput.value = Math.round(vehicle.price * 0.3);
+    }
+    const priceInput = document.getElementById('calcPrice');
+    if (!priceInput) {
+      // Create hidden price field for calculator
+      window._calcVehiclePrice = vehicle.price;
+    }
+    Calculator.calculate();
+  } catch(e) {
+    document.getElementById('detailsLoading').innerHTML = `
+      <div style="text-align:center;padding:4rem;">
+        <div style="font-size:3rem;margin-bottom:1rem;">⚠</div>
+        <h3 style="margin-bottom:0.75rem;">Vehicle not found</h3>
+        <a href="/inventory" class="btn btn-primary">Back to Inventory</a>
+      </div>`;
+  }
+}
+
+function renderVehicle(v) {
+  // Page meta
+  document.getElementById('pageTitle').textContent = `${v.name} ${v.year} — Manga Autos`;
+  document.getElementById('pageDesc').content = `${v.description?.substring(0,150)}...`;
+  document.getElementById('breadcrumbName').textContent = `${v.brand} ${v.model}`;
+
+  // Header
+  document.getElementById('detailName').textContent = `${v.year} ${v.brand} ${v.model}`;
+  document.getElementById('detailPrice').textContent = Utils.formatPrice(v.price);
+  document.getElementById('detailYear').textContent = `${v.year} · ${v.location}`;
+  document.getElementById('detailCondition').textContent = v.condition;
+  document.getElementById('detailViews').textContent = `${(v.views || 0).toLocaleString()} views`;
+  document.getElementById('detailDescription').textContent = v.description;
+
+  // Sidebar price
+  document.getElementById('sidebarPrice').textContent = Utils.formatPrice(v.price);
+  document.getElementById('mobilePriceBar').textContent = Utils.formatPrice(v.price);
+
+  // WhatsApp links
+  const msg = encodeURIComponent(`Hello Manga Autos! I'm interested in the ${v.year} ${v.brand} ${v.model} (ID: ${v.id}) listed at ${Utils.formatPrice(v.price)}. Is it still available?`);
+  document.getElementById('whatsappBtn').href = `https://wa.me/2348012345678?text=${msg}`;
+  document.getElementById('mobileWhatsAppBtn').href = `https://wa.me/2348012345678?text=${msg}`;
+
+  // Gallery
+  const images = v.images || [];
+  galleryImages.length = 0;
+  // Since we have no real images, use SVG placeholders with car info
+  for (let i = 0; i < Math.max(images.length, 3); i++) {
+    galleryImages.push({ label: `${v.brand} ${v.model} — View ${i+1}` });
+  }
+  renderGallery(0);
+
+  // Specs grid
+  const specs = [
+    { key: 'Engine', val: v.engine },
+    { key: 'Horsepower', val: v.horsepower ? `${v.horsepower} hp` : '—' },
+    { key: 'Transmission', val: v.transmission },
+    { key: 'Drivetrain', val: v.drivetrain },
+    { key: 'Fuel Type', val: v.fuelType },
+    { key: 'Mileage', val: Utils.formatMileage(v.mileage) },
+    { key: 'Exterior', val: v.exteriorColor },
+    { key: 'Interior', val: v.interiorColor },
+    { key: 'Condition', val: v.condition },
+    { key: 'Location', val: v.location },
+  ];
+  document.getElementById('specsGrid').innerHTML = specs.map(s => `
+    <div class="spec-cell">
+      <div class="spec-key">${s.key}</div>
+      <div class="spec-value">${s.val || '—'}</div>
+    </div>`).join('');
+
+  // Features
+  const feats = v.features || [];
+  document.getElementById('featuresList').innerHTML = feats.length
+    ? feats.map(f => `<div class="feature-item">${f}</div>`).join('')
+    : '<p style="color:var(--text-muted);font-size:0.875rem;">No features listed.</p>';
+
+  // Quick specs sidebar
+  const quick = [
+    { icon: 'fas fa-calendar', label: 'Year', val: v.year },
+    { icon: 'fas fa-tachometer-alt', label: 'Mileage', val: Utils.formatMileage(v.mileage) },
+    { icon: 'fas fa-gas-pump', label: 'Fuel Type', val: v.fuelType },
+    { icon: 'fas fa-cog', label: 'Transmission', val: v.transmission },
+    { icon: 'fas fa-paint-brush', label: 'Color', val: v.exteriorColor },
+  ];
+  document.getElementById('quickSpecs').innerHTML = quick.map(q => `
+    <div style="display:flex;align-items:center;gap:0.875rem;padding:0.75rem 0;border-bottom:1px solid var(--border-subtle);">
+      <div style="width:32px;height:32px;border-radius:var(--radius-sm);background:rgba(201,168,76,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+        <i class="${q.icon}" style="color:var(--gold);font-size:0.8rem;"></i>
+      </div>
+      <div>
+        <div style="font-size:0.65rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.08em;">${q.label}</div>
+        <div style="font-size:0.875rem;font-weight:600;color:var(--text-primary);">${q.val || '—'}</div>
+      </div>
+    </div>`).join('');
+
+  // Wishlist button state
+  updateWishlistBtn();
+}
+
+function renderGallery(index) {
+  currentGalleryIndex = index;
+  const mainImg = document.getElementById('galleryMainImg');
+  const counter = document.getElementById('galleryCounter');
+  const total = galleryImages.length;
+
+  // SVG placeholder (in production, replace with actual img tags)
+  mainImg.innerHTML = `
+    <div style="text-align:center;padding:3rem;">
+      <svg width="220" height="140" viewBox="0 0 200 120" fill="none" style="opacity:0.12;margin-bottom:1.5rem;">
+        <path d="M20 75 L40 75 L50 50 L70 35 L130 35 L150 50 L180 50 L190 75 L195 75" stroke="#C9A84C" stroke-width="2.5" stroke-linejoin="round"/>
+        <path d="M72 35 L75 55 L130 55 L128 35" stroke="#C9A84C" stroke-width="1.5"/>
+        <circle cx="55" cy="82" r="15" stroke="#C9A84C" stroke-width="2"/>
+        <circle cx="55" cy="82" r="6" stroke="#C9A84C" stroke-width="1.5"/>
+        <circle cx="150" cy="82" r="15" stroke="#C9A84C" stroke-width="2"/>
+        <circle cx="150" cy="82" r="6" stroke="#C9A84C" stroke-width="1.5"/>
+      </svg>
+      <div style="font-family:var(--font-display);font-size:1.25rem;color:var(--text-muted);">${galleryImages[index]?.label || ''}</div>
+      <div style="font-size:0.75rem;color:var(--text-muted);margin-top:0.5rem;letter-spacing:0.1em;text-transform:uppercase;">Photo ${index + 1} of ${total}</div>
+    </div>`;
+
+  counter.textContent = `${index + 1} / ${total}`;
+
+  // Render thumbs
+  const thumbsContainer = document.getElementById('galleryThumbs');
+  thumbsContainer.innerHTML = galleryImages.map((img, i) => `
+    <div class="gallery-thumb ${i === index ? 'active' : ''}" onclick="renderGallery(${i})">
+      <svg width="40" height="30" viewBox="0 0 40 30" fill="none" style="opacity:0.3;">
+        <path d="M4 20 L8 20 L10 13 L14 9 L26 9 L30 13 L36 13 L38 20" stroke="#C9A84C" stroke-width="1.5" stroke-linejoin="round"/>
+        <circle cx="11" cy="22" r="4" stroke="#C9A84C" stroke-width="1"/>
+        <circle cx="29" cy="22" r="4" stroke="#C9A84C" stroke-width="1"/>
+      </svg>
+    </div>`).join('');
+}
+
+function changeGallery(dir) {
+  currentGalleryIndex = (currentGalleryIndex + dir + galleryImages.length) % galleryImages.length;
+  renderGallery(currentGalleryIndex);
+}
+
+function openLightbox(index) {
+  const lb = document.getElementById('lightbox');
+  const content = document.getElementById('lightboxContent');
+  lb.classList.add('open');
+  document.body.style.overflow = 'hidden';
+  content.innerHTML = `
+    <div style="width:80vw;height:70vh;background:var(--bg-card);border-radius:var(--radius-lg);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:1rem;">
+      <svg width="200" height="120" viewBox="0 0 200 120" fill="none" style="opacity:0.15;">
+        <path d="M20 75 L40 75 L50 50 L70 35 L130 35 L150 50 L180 50 L190 75 L195 75" stroke="#C9A84C" stroke-width="2.5" stroke-linejoin="round"/>
+        <circle cx="55" cy="82" r="15" stroke="#C9A84C" stroke-width="2"/>
+        <circle cx="150" cy="82" r="15" stroke="#C9A84C" stroke-width="2"/>
+      </svg>
+      <div style="color:var(--text-muted);font-size:0.875rem;">${galleryImages[index]?.label || ''}</div>
+    </div>`;
+}
+
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function lightboxNav(dir) {
+  currentGalleryIndex = (currentGalleryIndex + dir + galleryImages.length) % galleryImages.length;
+  openLightbox(currentGalleryIndex);
+}
+
+function toggleWishlist() {
+  if (!currentVehicle) return;
+  Wishlist.toggle(currentVehicle.id);
+  updateWishlistBtn();
+}
+
+function updateWishlistBtn() {
+  if (!currentVehicle) return;
+  const isWished = Wishlist.has(currentVehicle.id);
+  const btns = [document.getElementById('wishlistToggleBtn'), document.getElementById('wishlistSideBtn')];
+  btns.forEach(btn => {
+    if (btn) {
+      btn.innerHTML = isWished
+        ? '<i class="fas fa-heart" style="color:var(--gold);"></i> Saved ✓'
+        : '<i class="far fa-heart"></i> Save to Wishlist';
+    }
+  });
+}
+
+function shareVehicle() {
+  if (navigator.share) {
+    navigator.share({
+      title: `${currentVehicle.brand} ${currentVehicle.model} — Manga Autos`,
+      text: `Check out this ${currentVehicle.year} ${currentVehicle.brand} ${currentVehicle.model} at Manga Autos, Abuja!`,
+      url: window.location.href,
+    });
+  } else {
+    navigator.clipboard.writeText(window.location.href);
+    Toast.show('Link copied to clipboard!', 'success');
+  }
+}
+
+async function loadRelated(brand, excludeId) {
+  const grid = document.getElementById('relatedGrid');
+  try {
+    const data = await API.get('/vehicles', { brand, limit: 3 });
+    const filtered = data.vehicles.filter(v => v.id !== excludeId).slice(0, 3);
+    if (!filtered.length) { grid.closest('section').style.display = 'none'; return; }
+    grid.innerHTML = filtered.map(v => createVehicleCard(v)).join('');
+    ScrollReveal.init();
+  } catch(e) { grid.closest('section').style.display = 'none'; }
+}
+
+function openInquiryModal() {
+  const modal = document.getElementById('inquiryModal');
+  modal.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+}
+
+function closeInquiryModal() {
+  document.getElementById('inquiryModal').style.display = 'none';
+  document.body.style.overflow = '';
+}
+
+document.getElementById('inquiryForm')?.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const btn = e.target.querySelector('button[type="submit"]');
+  btn.innerHTML = 'Sending... <i class="fas fa-spinner fa-spin"></i>';
+  btn.disabled = true;
+  try {
+    await API.post('/bookings', {
+      name: document.getElementById('inquiryName').value,
+      phone: document.getElementById('inquiryPhone').value,
+      email: document.getElementById('inquiryEmail').value,
+      vehicle: currentVehicle ? `${currentVehicle.brand} ${currentVehicle.model} (${currentVehicle.id})` : '',
+      notes: document.getElementById('inquiryMessage').value,
+      type: 'inquiry',
+    });
+    closeInquiryModal();
+    Toast.show('Inquiry sent! We\'ll contact you soon.', 'success');
+    e.target.reset();
+  } catch(err) {
+    Toast.show('Failed to send. Please WhatsApp us directly.', 'error');
+  } finally {
+    btn.innerHTML = 'Send Inquiry';
+    btn.disabled = false;
+  }
+});
+
+// Override calculator to use vehicle price
+const origCalc = Calculator.calculate.bind(Calculator);
+Calculator.calculate = function() {
+  const price = currentVehicle?.price || window._calcVehiclePrice || 50000000;
+  const down = parseFloat(document.getElementById('calcDown')?.value || 0);
+  const rate = parseFloat(document.getElementById('calcRate')?.value || 15) / 100 / 12;
+  const months = parseInt(document.getElementById('calcMonths')?.value || 48);
+  const principal = price - down;
+  let monthly = 0;
+  if (rate > 0 && principal > 0) {
+    monthly = principal * rate * Math.pow(1+rate,months) / (Math.pow(1+rate,months) - 1);
+  } else if (principal > 0) {
+    monthly = principal / months;
+  }
+  const totalPayable = monthly * months;
+  const totalInterest = totalPayable - principal;
+  const monthlyEl = document.getElementById('calcMonthly');
+  const totalEl = document.getElementById('calcTotal');
+  const interestEl = document.getElementById('calcInterest');
+  if (monthlyEl) monthlyEl.textContent = Utils.formatPrice(monthly);
+  if (totalEl) totalEl.textContent = Utils.formatPrice(totalPayable);
+  if (interestEl) interestEl.textContent = Utils.formatPrice(totalInterest);
+  const downDisplay = document.getElementById('calcDownDisplay');
+  const rateDisplay = document.getElementById('calcRateDisplay');
+  const monthsDisplay = document.getElementById('calcMonthsDisplay');
+  if (downDisplay) downDisplay.textContent = Utils.formatPrice(down);
+  if (rateDisplay) rateDisplay.textContent = `${document.getElementById('calcRate')?.value}%`;
+  if (monthsDisplay) monthsDisplay.textContent = `${document.getElementById('calcMonths')?.value} mo`;
+};
+
+loadVehicle();
+</script>
+</body>
+</html>

@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">`
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manga Autos — Premium Automotive Marketplace | Abuja, Nigeria</title>
+  <meta name="description" content="Manga Autos is Abuja's premier luxury automotive dealership. Mercedes-Benz, BMW, Tesla, Range Rover. Foreign used cars with full inspection reports.">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="/css/main.css">
+  <style>
+    .featured-header{display:flex;align-items:flex-end;justify-content:space-between;gap:2rem;margin-bottom:clamp(2rem,4vw,3.5rem);}
+    .process-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:0;position:relative;}
+    .process-steps::before{content:'';position:absolute;top:2rem;left:12.5%;right:12.5%;height:1px;background:linear-gradient(to right,transparent,var(--gold),transparent);opacity:0.3;}
+    .process-step{display:flex;flex-direction:column;align-items:center;text-align:center;padding:2rem 1rem;}
+    .step-number{width:56px;height:56px;border-radius:50%;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size:1.5rem;font-weight:600;color:var(--gold);margin-bottom:1.25rem;position:relative;z-index:1;background:var(--bg-primary);}
+    .step-title{font-weight:600;margin-bottom:0.5rem;}
+    .step-desc{font-size:0.875rem;color:var(--text-secondary);line-height:1.6;}
+    .marquee-wrap{overflow:hidden;padding:1.25rem 0;background:var(--bg-secondary);border-top:1px solid var(--border-subtle);border-bottom:1px solid var(--border-subtle);}
+    .marquee-track{display:flex;gap:3rem;animation:marquee 25s linear infinite;width:max-content;}
+    .marquee-item{font-family:var(--font-display);font-size:1.75rem;font-weight:300;letter-spacing:0.06em;color:var(--text-muted);white-space:nowrap;}
+    .marquee-dot{color:var(--gold);}
+    @keyframes marquee{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+    .inspection-grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center;}
+    .inspection-visual{background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:var(--radius-xl);padding:2rem;display:flex;flex-direction:column;gap:0.75rem;}
+    .check-item{display:flex;align-items:center;gap:1rem;padding:0.875rem 1rem;background:var(--bg-elevated);border-radius:var(--radius-md);border:1px solid var(--border-subtle);font-size:0.875rem;color:var(--text-secondary);}
+    .check-icon{width:28px;height:28px;border-radius:50%;background:rgba(37,211,102,0.12);border:1px solid rgba(37,211,102,0.3);display:flex;align-items:center;justify-content:center;color:#25D366;font-size:0.7rem;flex-shrink:0;}
+    .about-strip{background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:var(--radius-xl);display:grid;grid-template-columns:1.2fr 1fr;overflow:hidden;}
+    .about-strip-content{padding:4rem;}
+    .about-strip-visual{background:var(--gold-gradient);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:0.5rem;padding:3rem;position:relative;overflow:hidden;}
+    .about-strip-visual::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at center,rgba(255,255,255,0.15) 0%,transparent 60%);}
+    .about-big-number{font-family:var(--font-display);font-size:8rem;font-weight:700;color:rgba(0,0,0,0.2);line-height:1;position:relative;z-index:1;}
+    .about-year-label{font-size:0.75rem;letter-spacing:0.2em;text-transform:uppercase;color:rgba(0,0,0,0.5);font-weight:700;position:relative;z-index:1;}
+    @media(max-width:1024px){.inspection-grid{grid-template-columns:1fr;}.process-steps{grid-template-columns:repeat(2,1fr);}.process-steps::before{display:none;}.about-strip{grid-template-columns:1fr;}.about-strip-visual{min-height:180px;}}
+    @media(max-width:768px){.featured-header{flex-direction:column;align-items:flex-start;}.process-steps{grid-template-columns:1fr 1fr;}}
+    @media(max-width:480px){.process-steps{grid-template-columns:1fr;}}
+  </style>
+</head>
+<body>
+<div class="page-loader" id="pageLoader"><div class="loader-logo">MANGA AUTOS</div><div class="loader-bar"></div></div>
+<a href="https://wa.me/2348012345678?text=Hello%20Manga%20Autos!" class="whatsapp-float" target="_blank"><i class="fab fa-whatsapp"></i></a>
+<div class="toast-container" id="toastContainer"></div>
+
+<nav class="navbar hero-visible" id="navbar">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo"><span class="nav-logo-text">MANGA AUTOS</span><span class="nav-logo-sub">Luxury Automotive · Abuja</span></a>
+    <ul class="nav-links">
+      <li><a href="/" class="nav-link active">Home</a></li>
+      <li><a href="/inventory" class="nav-link">Inventory</a></li>
+      <li><a href="/about" class="nav-link">About</a></li>
+      <li><a href="/contact" class="nav-link">Contact</a></li>
+      <li><a href="/admin" class="nav-link">Admin</a></li>
+    </ul>
+    <div class="nav-actions">
+      <button class="theme-toggle" id="themeToggle"><i class="fas fa-sun"></i></button>
+      <button class="wishlist-btn" title="Wishlist"><i class="fas fa-heart"></i><span class="wishlist-count" id="wishlistCount">0</span></button>
+      <a href="https://wa.me/2348012345678" target="_blank" class="nav-cta"><i class="fab fa-whatsapp"></i> WhatsApp Us</a>
+    </div>
+    <button class="mobile-menu-btn" id="menuBtn"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <nav class="mobile-nav-links">
+    <a href="/" class="mobile-nav-link">Home</a>
+    <a href="/inventory" class="mobile-nav-link">Inventory</a>
+    <a href="/about" class="mobile-nav-link">About Us</a>
+    <a href="/contact" class="mobile-nav-link">Contact</a>
+  </nav>
+  <div style="margin-top:2rem;display:flex;flex-direction:column;gap:1rem;">
+    <a href="https://wa.me/2348012345678" target="_blank" class="btn btn-whatsapp btn-lg"><i class="fab fa-whatsapp"></i> Chat on WhatsApp</a>
+    <a href="tel:+2348012345678" class="btn btn-outline btn-lg"><i class="fas fa-phone"></i> Call Now</a>
+  </div>
+</div>
+
+<!-- HERO -->
+<section class="hero" style="position:relative;min-height:100vh;display:flex;align-items:center;">
+  <div style="position:absolute;inset:0;z-index:0;overflow:hidden;">
+    <div style="position:absolute;inset:0;background:linear-gradient(135deg,#050505 0%,#0f0d05 50%,#080808 100%);"></div>
+    <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 75% 50%,rgba(201,168,76,0.07) 0%,transparent 55%),radial-gradient(ellipse at 20% 80%,rgba(201,168,76,0.04) 0%,transparent 40%);"></div>
+    <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(201,168,76,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(201,168,76,0.025) 1px,transparent 1px);background-size:80px 80px;"></div>
+    <svg style="position:absolute;right:-5%;top:50%;transform:translateY(-50%);width:55%;height:90%;opacity:0.04;" viewBox="0 0 600 700" fill="none">
+      <ellipse cx="550" cy="350" rx="380" ry="340" stroke="#C9A84C" stroke-width="1.5"/>
+      <ellipse cx="550" cy="350" rx="300" ry="260" stroke="#C9A84C" stroke-width="1"/>
+      <ellipse cx="550" cy="350" rx="220" ry="180" stroke="#C9A84C" stroke-width="0.5"/>
+    </svg>
+    <svg style="position:absolute;right:5%;bottom:10%;width:42%;opacity:0.06;" viewBox="0 0 800 300" fill="none">
+      <path d="M50 200 L120 200 L140 140 L200 100 L380 90 L480 100 L540 140 L680 140 L740 200 L750 200" stroke="#C9A84C" stroke-width="2.5" stroke-linejoin="round"/>
+      <circle cx="180" cy="210" r="42" stroke="#C9A84C" stroke-width="2"/>
+      <circle cx="180" cy="210" r="20" stroke="#C9A84C" stroke-width="1"/>
+      <circle cx="620" cy="210" r="42" stroke="#C9A84C" stroke-width="2"/>
+      <circle cx="620" cy="210" r="20" stroke="#C9A84C" stroke-width="1"/>
+    </svg>
+  </div>
+  <div style="position:relative;z-index:3;width:100%;max-width:var(--max-width);margin:0 auto;padding:calc(var(--nav-height) + 5rem) clamp(1.5rem,5vw,3rem) 5rem;">
+    <div style="max-width:680px;">
+      <div class="hero-badge" style="animation:fadeInDown 0.8s ease both;"><span></span> Abuja's #1 Premium Dealership · Est. 2018</div>
+      <h1 class="hero-title" style="animation:fadeInUp 0.9s ease 0.1s both;">Drive<br><em>Beyond</em><br>Ordinary.</h1>
+      <p class="hero-subtitle" style="animation:fadeInUp 0.9s ease 0.2s both;">Manga Autos delivers Abuja's most exclusive automotive collection. Verified luxury vehicles, transparent sourcing, and white-glove service from acquisition to delivery.</p>
+      <div class="hero-actions" style="animation:fadeInUp 0.9s ease 0.3s both;">
+        <a href="/inventory" class="btn btn-primary btn-lg">Explore Inventory <i class="fas fa-arrow-right" style="font-size:0.75rem;"></i></a>
+        <a href="https://wa.me/2348012345678?text=Hello!%20I'd%20like%20to%20enquire%20about%20a%20vehicle." target="_blank" class="btn btn-whatsapp btn-lg"><i class="fab fa-whatsapp"></i> Get Expert Advice</a>
+        <a href="#booking" class="btn btn-outline btn-lg">Book Inspection</a>
+      </div>
+      <div class="hero-stats" style="animation:fadeInUp 0.9s ease 0.4s both;">
+        <div class="hero-stat"><div class="hero-stat-value" data-counter data-target="247" data-suffix="+">247+</div><div class="hero-stat-label">Happy Clients</div></div>
+        <div class="hero-stat"><div class="hero-stat-value" data-counter data-target="500" data-suffix="+">500+</div><div class="hero-stat-label">Vehicles Sold</div></div>
+        <div class="hero-stat"><div class="hero-stat-value">6+</div><div class="hero-stat-label">Years Experience</div></div>
+        <div class="hero-stat"><div class="hero-stat-value">100%</div><div class="hero-stat-label">Verified Stock</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-scroll"><div class="hero-scroll-line"></div><span>Scroll</span></div>
+</section>
+
+<!-- BRANDS STRIP -->
+<div style="padding:2rem clamp(1.5rem,5vw,3rem);background:var(--bg-secondary);border-bottom:1px solid var(--border-subtle);">
+  <div class="container">
+    <p style="text-align:center;font-size:0.65rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--text-muted);margin-bottom:1.25rem;">Our Premium Brands</p>
+    <div style="display:flex;gap:0.75rem;flex-wrap:wrap;justify-content:center;">
+      <button class="brand-item active" onclick="filterByBrand(this,'')">All Makes</button>
+      <button class="brand-item" onclick="filterByBrand(this,'Mercedes-Benz')">Mercedes-Benz</button>
+      <button class="brand-item" onclick="filterByBrand(this,'BMW')">BMW</button>
+      <button class="brand-item" onclick="filterByBrand(this,'Tesla')">Tesla</button>
+      <button class="brand-item" onclick="filterByBrand(this,'Range Rover')">Range Rover</button>
+      <button class="brand-item" onclick="filterByBrand(this,'Porsche')">Porsche</button>
+    </div>
+  </div>
+</div>
+
+<!-- FEATURED VEHICLES -->
+<section class="section" id="featured">
+  <div class="container">
+    <div class="featured-header">
+      <div>
+        <div class="section-label"><span class="label">Curated Selection</span></div>
+        <h2 class="display-lg">Featured <em style="font-style:italic;color:var(--gold);">Inventory</em></h2>
+        <div class="divider"></div>
+        <p class="body-lg text-secondary" style="max-width:480px;">Hand-picked vehicles from our collection. Every listing is thoroughly inspected and verified.</p>
+      </div>
+      <a href="/inventory" class="btn btn-outline">View All <i class="fas fa-arrow-right"></i></a>
+    </div>
+    <div class="cars-grid" id="featuredGrid">
+      <div class="skeleton" style="height:420px;border-radius:var(--radius-lg);"></div>
+      <div class="skeleton" style="height:420px;border-radius:var(--radius-lg);"></div>
+      <div class="skeleton" style="height:420px;border-radius:var(--radius-lg);"></div>
+    </div>
+    <div style="text-align:center;margin-top:2.5rem;"><a href="/inventory" class="btn btn-outline btn-lg">Explore All Vehicles →</a></div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <span class="marquee-item">Mercedes-Benz <span class="marquee-dot">✦</span></span>
+    <span class="marquee-item">BMW <span class="marquee-dot">✦</span></span>
+    <span class="marquee-item">Tesla <span class="marquee-dot">✦</span></span>
+    <span class="marquee-item">Range Rover <span class="marquee-dot">✦</span></span>
+    <span class="marquee-item">Porsche <span class="marquee-dot">✦</span></span>
+    <span class="marquee-item">Lexus <span class="marquee-dot">✦</span></span>
+    <span class="marquee-item">Bentley <span class="marquee-dot">✦</span></span>
+    <span class="marquee-item">Lamborghini <span class="marquee-dot">✦</span></span>
+    <span class="marquee-item">Mercedes-Benz <span class="marquee-dot">✦</span></span>
+    <span class="marquee-item">BMW <span class="marquee-dot">✦</span></span>
+    <span class="marquee-item">Tesla <span class="marquee-dot">✦</span></span>
+    <span class="marquee-item">Range Rover <span class="marquee-dot">✦</span></span>
+    <span class="marquee-item">Porsche <span class="marquee-dot">✦</span></span>
+    <span class="marquee-item">Lexus <span class="marquee-dot">✦</span></span>
+    <span class="marquee-item">Bentley <span class="marquee-dot">✦</span></span>
+    <span class="marquee-item">Lamborghini <span class="marquee-dot">✦</span></span>
+  </div>
+</div>
+
+<!-- WHY MANGA AUTOS -->
+<section class="section">
+  <div class="container">
+    <div class="section-header centered">
+      <div class="section-label" style="justify-content:center;"><span class="label">Why Choose Us</span></div>
+      <h2 class="display-lg">The Manga Autos <em style="font-style:italic;color:var(--gold);">Difference</em></h2>
+      <div class="divider centered"></div>
+      <p class="body-lg text-secondary" style="max-width:540px;margin:0 auto;">We don't just sell cars. We deliver confidence, trust, and the experience your investment deserves.</p>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card reveal"><div class="feature-icon">🔍</div><h3 class="feature-title">200-Point Inspection</h3><p class="feature-desc">Every vehicle undergoes our rigorous 200-point inspection. Full condition reports with zero hidden surprises.</p></div>
+      <div class="feature-card reveal"><div class="feature-icon">🛡️</div><h3 class="feature-title">Verified Authenticity</h3><p class="feature-desc">All chassis numbers, histories, and titles verified. CAC-registered dealership with full accountability.</p></div>
+      <div class="feature-card reveal"><div class="feature-icon">🌍</div><h3 class="feature-title">Direct Global Sourcing</h3><p class="feature-desc">We source directly from USA, Europe, and UAE auctions. No middlemen means better pricing for you.</p></div>
+      <div class="feature-card reveal"><div class="feature-icon">🚗</div><h3 class="feature-title">Door-to-Door Delivery</h3><p class="feature-desc">From Lagos ports to your Abuja doorstep. Full logistics managed with GPS tracking throughout.</p></div>
+      <div class="feature-card reveal"><div class="feature-icon">💳</div><h3 class="feature-title">Flexible Financing</h3><p class="feature-desc">Partner bank auto loans with competitive rates. Drive today, pay comfortably over 12–60 months.</p></div>
+      <div class="feature-card reveal"><div class="feature-icon">📞</div><h3 class="feature-title">Lifetime Support</h3><p class="feature-desc">After-sales support, service referrals, and trade-in programs. Our relationship starts at purchase.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-section section">
+  <div class="container">
+    <div class="stats-grid">
+      <div class="stat-item reveal"><div class="stat-number" data-counter data-target="247" data-suffix="+">247+</div><div class="stat-label">Happy Clients</div></div>
+      <div class="stat-item reveal"><div class="stat-number" data-counter data-target="500" data-suffix="+">500+</div><div class="stat-label">Cars Delivered</div></div>
+      <div class="stat-item reveal"><div class="stat-number" data-counter data-target="30" data-suffix="+">30+</div><div class="stat-label">Luxury Brands</div></div>
+      <div class="stat-item reveal"><div class="stat-number">6+</div><div class="stat-label">Years in Business</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<section class="section">
+  <div class="container">
+    <div class="section-header centered">
+      <div class="section-label" style="justify-content:center;"><span class="label">Our Process</span></div>
+      <h2 class="display-lg">Your Journey to <em style="font-style:italic;color:var(--gold);">Excellence</em></h2>
+      <div class="divider centered"></div>
+    </div>
+    <div class="process-steps">
+      <div class="process-step reveal"><div class="step-number">01</div><h3 class="step-title">Browse & Select</h3><p class="step-desc">Explore our curated inventory online or visit our Abuja showroom. Find the vehicle that matches your vision.</p></div>
+      <div class="process-step reveal"><div class="step-number">02</div><h3 class="step-title">Inspect & Verify</h3><p class="step-desc">Book a comprehensive inspection. Review our 200-point condition report. Total transparency guaranteed.</p></div>
+      <div class="process-step reveal"><div class="step-number">03</div><h3 class="step-title">Finance & Close</h3><p class="step-desc">Choose outright purchase or financing. We handle all documentation, registration, and paperwork.</p></div>
+      <div class="process-step reveal"><div class="step-number">04</div><h3 class="step-title">Drive Away</h3><p class="step-desc">Your vehicle delivered clean, fueled, and registration-ready. Doorstep delivery available across Abuja.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- INSPECTION / BOOKING -->
+<section class="section" style="background:var(--bg-secondary);" id="booking">
+  <div class="container">
+    <div class="inspection-grid">
+      <div>
+        <div class="section-label"><span class="label">Free Inspection</span></div>
+        <h2 class="display-lg">Book Your Vehicle <em style="font-style:italic;color:var(--gold);">Inspection</em></h2>
+        <div class="divider"></div>
+        <p class="body-lg text-secondary" style="max-width:460px;margin-bottom:2rem;">Considering a purchase? Book a comprehensive inspection with our certified automotive engineers. No obligation, no hidden fees.</p>
+        <form id="bookingForm" style="display:flex;flex-direction:column;gap:1.25rem;">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+            <div class="form-group"><label class="form-label">Full Name *</label><input type="text" class="form-control" id="bookName" placeholder="Alhaji Musa" required></div>
+            <div class="form-group"><label class="form-label">Phone Number *</label><input type="tel" class="form-control" id="bookPhone" placeholder="+234 801 234 5678" required></div>
+          </div>
+          <div class="form-group"><label class="form-label">Vehicle of Interest</label><input type="text" class="form-control" id="bookVehicle" placeholder="e.g. Mercedes GLE 450 2023"></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+            <div class="form-group"><label class="form-label">Preferred Date *</label><input type="date" class="form-control" id="bookDate" required></div>
+            <div class="form-group"><label class="form-label">Service Type</label><select class="form-control" id="bookType"><option value="inspection">Vehicle Inspection</option><option value="test-drive">Test Drive</option><option value="pre-order">Pre-Order Consultation</option><option value="valuation">Trade-In Valuation</option></select></div>
+          </div>
+          <div class="form-group"><label class="form-label">Additional Notes</label><textarea class="form-control" id="bookNotes" rows="3" placeholder="Any specific requirements or questions..."></textarea></div>
+          <button type="submit" class="btn btn-primary btn-lg" style="align-self:flex-start;">Book Appointment <i class="fas fa-arrow-right"></i></button>
+        </form>
+      </div>
+      <div class="inspection-visual reveal">
+        <div class="label" style="margin-bottom:0.75rem;">Inspection Covers</div>
+        <div class="check-item"><span class="check-icon"><i class="fas fa-check"></i></span> Engine & Transmission Condition</div>
+        <div class="check-item"><span class="check-icon"><i class="fas fa-check"></i></span> Chassis & Body Integrity</div>
+        <div class="check-item"><span class="check-icon"><i class="fas fa-check"></i></span> Electrical & Electronics Systems</div>
+        <div class="check-item"><span class="check-icon"><i class="fas fa-check"></i></span> Interior & Exterior Assessment</div>
+        <div class="check-item"><span class="check-icon"><i class="fas fa-check"></i></span> Brake & Suspension Check</div>
+        <div class="check-item"><span class="check-icon"><i class="fas fa-check"></i></span> VIN & Title Verification</div>
+        <div class="check-item"><span class="check-icon"><i class="fas fa-check"></i></span> Accident History Disclosure</div>
+        <div class="check-item"><span class="check-icon"><i class="fas fa-check"></i></span> Full Service History Review</div>
+        <div style="padding:1.25rem;background:rgba(201,168,76,0.07);border:1px solid rgba(201,168,76,0.2);border-radius:var(--radius-md);margin-top:0.5rem;">
+          <div style="font-size:0.7rem;color:var(--gold);font-weight:700;letter-spacing:0.08em;margin-bottom:0.25rem;">✦ COMPLIMENTARY SERVICE</div>
+          <div style="font-size:0.85rem;color:var(--text-secondary);">Comprehensive inspection report provided at no charge with any Manga Autos purchase.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LOAN CALCULATOR -->
+<section class="section">
+  <div class="container">
+    <div style="display:grid;grid-template-columns:1fr 1.2fr;gap:4rem;align-items:center;">
+      <div>
+        <div class="section-label"><span class="label">Auto Financing</span></div>
+        <h2 class="display-lg">Loan <em style="font-style:italic;color:var(--gold);">Calculator</em></h2>
+        <div class="divider"></div>
+        <p class="body-lg text-secondary" style="max-width:400px;margin-bottom:2rem;">Estimate your monthly payments. Competitive rates from leading Nigerian banks.</p>
+        <div style="display:flex;flex-direction:column;gap:0.875rem;">
+          <div style="display:flex;align-items:center;gap:0.75rem;font-size:0.875rem;color:var(--text-secondary);"><span style="color:var(--gold);">✦</span> Competitive interest rates from 12% p.a.</div>
+          <div style="display:flex;align-items:center;gap:0.75rem;font-size:0.875rem;color:var(--text-secondary);"><span style="color:var(--gold);">✦</span> Up to 60-month repayment period</div>
+          <div style="display:flex;align-items:center;gap:0.75rem;font-size:0.875rem;color:var(--text-secondary);"><span style="color:var(--gold);">✦</span> Minimum 20% down payment required</div>
+          <div style="display:flex;align-items:center;gap:0.75rem;font-size:0.875rem;color:var(--text-secondary);"><span style="color:var(--gold);">✦</span> Approval decision within 48 hours</div>
+        </div>
+      </div>
+      <div class="calculator reveal" id="loanCalculator">
+        <div style="display:flex;flex-direction:column;gap:1.5rem;">
+          <div class="form-group"><label class="form-label">Vehicle Price (₦)</label><input type="number" class="form-control" id="calcPrice" value="50000000" min="1000000" step="1000000" oninput="Calculator.calculate()"></div>
+          <div class="form-group">
+            <div style="display:flex;justify-content:space-between;margin-bottom:0.5rem;"><label class="form-label">Down Payment</label><span style="font-size:0.875rem;color:var(--gold);" id="calcDownDisplay">₦10M</span></div>
+            <input type="range" id="calcDown" min="0" max="50000000" value="10000000" step="1000000" oninput="Calculator.calculate()">
+          </div>
+          <div class="form-group">
+            <div style="display:flex;justify-content:space-between;margin-bottom:0.5rem;"><label class="form-label">Interest Rate (Annual)</label><span style="font-size:0.875rem;color:var(--gold);" id="calcRateDisplay">15%</span></div>
+            <input type="range" id="calcRate" min="5" max="30" value="15" step="0.5" oninput="Calculator.calculate()">
+          </div>
+          <div class="form-group">
+            <div style="display:flex;justify-content:space-between;margin-bottom:0.5rem;"><label class="form-label">Loan Duration</label><span style="font-size:0.875rem;color:var(--gold);" id="calcMonthsDisplay">48 mo</span></div>
+            <input type="range" id="calcMonths" min="12" max="60" value="48" step="6" oninput="Calculator.calculate()">
+          </div>
+        </div>
+        <div class="calculator-result">
+          <div style="font-size:0.65rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-muted);margin-bottom:0.5rem;">Estimated Monthly Payment</div>
+          <div class="calc-monthly" id="calcMonthly">₦0</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:1.5rem;padding-top:1.5rem;border-top:1px solid var(--border-subtle);">
+            <div style="text-align:center;"><div style="font-size:0.65rem;color:var(--text-muted);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.25rem;">Total Payable</div><div style="font-family:var(--font-display);font-size:1.25rem;color:var(--text-primary);" id="calcTotal">₦0</div></div>
+            <div style="text-align:center;"><div style="font-size:0.65rem;color:var(--text-muted);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.25rem;">Total Interest</div><div style="font-family:var(--font-display);font-size:1.25rem;color:var(--text-secondary);" id="calcInterest">₦0</div></div>
+          </div>
+          <p style="font-size:0.7rem;color:var(--text-muted);margin-top:1rem;line-height:1.5;">*Estimates only. Final rates subject to bank approval.</p>
+        </div>
+        <a href="https://wa.me/2348012345678?text=I'd%20like%20to%20discuss%20financing." target="_blank" class="btn btn-whatsapp" style="width:100%;justify-content:center;margin-top:1rem;"><i class="fab fa-whatsapp"></i> Discuss Financing Options</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="section" style="background:var(--bg-secondary);">
+  <div class="container">
+    <div class="section-header centered">
+      <div class="section-label" style="justify-content:center;"><span class="label">Client Stories</span></div>
+      <h2 class="display-lg">What Our <em style="font-style:italic;color:var(--gold);">Clients Say</em></h2>
+      <div class="divider centered"></div>
+      <p class="body-lg text-secondary" style="max-width:500px;margin:0 auto;">Real experiences from real clients. Every review is verified and authentic.</p>
+    </div>
+    <div class="testimonials-grid" id="testimonialsGrid">
+      <div class="skeleton" style="height:280px;border-radius:var(--radius-lg);"></div>
+      <div class="skeleton" style="height:280px;border-radius:var(--radius-lg);"></div>
+      <div class="skeleton" style="height:280px;border-radius:var(--radius-lg);"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT STRIP -->
+<section class="section">
+  <div class="container">
+    <div class="about-strip reveal">
+      <div class="about-strip-content">
+        <div class="section-label"><span class="label">Our Story</span></div>
+        <h2 class="display-lg" style="color:var(--text-primary);">Trusted Since <em style="color:var(--gold);">2018</em></h2>
+        <div class="divider"></div>
+        <p style="color:var(--text-secondary);line-height:1.8;margin-bottom:2rem;max-width:440px;font-size:0.95rem;">Manga Autos was born from a vision: to give Abuja's discerning buyers access to world-class automotive experiences. From our first transaction to our 500th delivery, our commitment to excellence has never wavered. CAC registered. NG-ABJ-2018-0047.</p>
+        <div style="display:flex;gap:1rem;flex-wrap:wrap;"><a href="/about" class="btn btn-primary">Our Full Story →</a><a href="/contact" class="btn btn-outline">Visit Showroom</a></div>
+      </div>
+      <div class="about-strip-visual"><div class="about-big-number">6</div><div class="about-year-label">Years of Excellence</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="section" style="background:var(--bg-secondary);">
+  <div class="container">
+    <div class="cta-banner reveal">
+      <div class="label" style="margin-bottom:1rem;">Ready to Drive?</div>
+      <h2 class="display-xl">Find Your Perfect <em style="font-style:italic;color:var(--gold);">Vehicle</em></h2>
+      <div class="divider centered"></div>
+      <p class="body-lg text-secondary" style="max-width:500px;margin:0 auto 2rem;">Talk to our automotive experts. Tell us what you're looking for and we'll source it — even if it's not in our current inventory.</p>
+      <div class="cta-actions">
+        <a href="/inventory" class="btn btn-primary btn-lg">Browse Inventory</a>
+        <a href="https://wa.me/2348012345678" target="_blank" class="btn btn-whatsapp btn-lg"><i class="fab fa-whatsapp"></i> Chat on WhatsApp</a>
+        <a href="tel:+2348012345678" class="btn btn-outline btn-lg"><i class="fas fa-phone"></i> Call Us Now</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-grid">
+    <div>
+      <div class="footer-logo">MANGA AUTOS</div>
+      <div class="footer-tagline">Premium Automotive · Abuja, Nigeria</div>
+      <p class="footer-desc">Abuja's most trusted luxury automotive dealership. Verified vehicles, transparent transactions, white-glove service since 2018.</p>
+      <div class="footer-socials">
+        <a href="#" class="social-btn"><i class="fab fa-instagram"></i></a>
+        <a href="#" class="social-btn"><i class="fab fa-facebook"></i></a>
+        <a href="#" class="social-btn"><i class="fab fa-twitter"></i></a>
+        <a href="https://wa.me/2348012345678" target="_blank" class="social-btn"><i class="fab fa-whatsapp"></i></a>
+        <a href="#" class="social-btn"><i class="fab fa-youtube"></i></a>
+      </div>
+    </div>
+    <div>
+      <div class="footer-heading">Navigation</div>
+      <div class="footer-links"><a href="/" class="footer-link">Home</a><a href="/inventory" class="footer-link">Inventory</a><a href="/about" class="footer-link">About Us</a><a href="/contact" class="footer-link">Contact</a></div>
+    </div>
+    <div>
+      <div class="footer-heading">Services</div>
+      <div class="footer-links"><a href="#" class="footer-link">Vehicle Sourcing</a><a href="#" class="footer-link">Car Inspection</a><a href="#" class="footer-link">Auto Financing</a><a href="#" class="footer-link">Trade-In Program</a><a href="#" class="footer-link">Delivery Logistics</a></div>
+    </div>
+    <div>
+      <div class="footer-heading">Contact Us</div>
+      <div class="footer-contact-item"><i class="fas fa-map-marker-alt footer-contact-icon"></i><span>15 Gana Street, Maitama, Abuja FCT</span></div>
+      <div class="footer-contact-item"><i class="fas fa-phone footer-contact-icon"></i><span>+234 801 234 5678</span></div>
+      <div class="footer-contact-item"><i class="fas fa-envelope footer-contact-icon"></i><span>hello@mangaautos.ng</span></div>
+      <div class="footer-contact-item"><i class="fas fa-clock footer-contact-icon"></i><span>Mon–Sat: 8am–6pm · Sun: 10am–4pm</span></div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-copy">© 2024 Manga Autos. All rights reserved. CAC Reg. NG-ABJ-2018-0047</span>
+    <div class="footer-legal"><a href="#">Privacy Policy</a><a href="#">Terms of Service</a></div>
+  </div>
+</footer>
+
+<script src="/js/core.js"></script>
+<script>
+async function loadFeatured(brand=''){
+  const grid=document.getElementById('featuredGrid');
+  try{
+    const params={limit:6};
+    if(brand)params.brand=brand;
+    const data=await API.get('/vehicles',params);
+    if(!data.vehicles.length){grid.innerHTML=`<div style="grid-column:1/-1;text-align:center;padding:4rem;color:var(--text-muted);"><div style="font-size:3rem;margin-bottom:1rem;">🚗</div><p>No vehicles found for this filter.</p></div>`;return;}
+    grid.innerHTML=data.vehicles.map(v=>createVehicleCard(v)).join('');
+    ScrollReveal.init();
+  }catch(e){grid.innerHTML=`<div style="grid-column:1/-1;text-align:center;color:var(--text-muted);padding:2rem;">Unable to load vehicles. Please refresh.</div>`;}
+}
+async function loadTestimonials(){
+  const grid=document.getElementById('testimonialsGrid');
+  try{
+    const testimonials=await API.get('/testimonials');
+    grid.innerHTML=testimonials.map(t=>`
+      <div class="testimonial-card reveal">
+        <div class="testimonial-quote">"</div>
+        <div class="testimonial-stars">${'★'.repeat(t.rating)}</div>
+        <p class="testimonial-text">${t.text}</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">${Utils.getInitials(t.name)}</div>
+          <div>
+            <div class="testimonial-name">${t.name}</div>
+            <div class="testimonial-role">${t.role} · ${t.location}</div>
+            <div style="display:flex;align-items:center;gap:0.4rem;margin-top:0.25rem;font-size:0.7rem;color:var(--gold);">🚗 ${t.vehicle}</div>
+          </div>
+        </div>
+      </div>`).join('');
+    ScrollReveal.init();
+  }catch(e){console.error(e);}
+}
+function filterByBrand(btn,brand){
+  document.querySelectorAll('.brand-item').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  loadFeatured(brand);
+}
+document.getElementById('bookingForm')?.addEventListener('submit',async(e)=>{
+  e.preventDefault();
+  const btn=e.target.querySelector('button[type="submit"]');
+  const orig=btn.innerHTML;
+  btn.innerHTML='Booking... <i class="fas fa-spinner fa-spin"></i>';
+  btn.disabled=true;
+  try{
+    await API.post('/bookings',{name:document.getElementById('bookName').value,phone:document.getElementById('bookPhone').value,vehicle:document.getElementById('bookVehicle').value,date:document.getElementById('bookDate').value,type:document.getElementById('bookType').value,notes:document.getElementById('bookNotes').value});
+    Toast.show("Booking confirmed! We'll call you shortly. ✓",'success');
+    e.target.reset();
+  }catch(err){Toast.show('Booking failed. Please call us directly.','error');}
+  finally{btn.innerHTML=orig;btn.disabled=false;}
+});
+const dateInput=document.getElementById('bookDate');
+if(dateInput)dateInput.min=new Date().toISOString().split('T')[0];
+loadFeatured();
+loadTestimonials();
+</script>
+</body>
+</html>

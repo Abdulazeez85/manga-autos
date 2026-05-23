@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Us — Manga Autos | Visit Our Abuja Showroom</title>
+  <meta name="description" content="Contact Manga Autos — visit our Maitama Abuja showroom, WhatsApp, call or email. Mon–Sat 8am–6pm.">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="/css/main.css">
+  <style>
+    .contact-hero{padding:calc(var(--nav-height) + 4rem) clamp(1.5rem,5vw,3rem) 4rem;background:var(--bg-secondary);border-bottom:1px solid var(--border-subtle);position:relative;overflow:hidden;}
+    .contact-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 70% 50%,rgba(201,168,76,.05) 0%,transparent 55%);}
+    .contact-layout{display:grid;grid-template-columns:1fr 1.2fr;gap:4rem;align-items:start;}
+    .contact-info-card{display:flex;align-items:flex-start;gap:1.25rem;padding:1.5rem;background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:var(--radius-lg);transition:all var(--transition);text-decoration:none;}
+    .contact-info-card:hover{border-color:var(--border);transform:translateX(4px);}
+    .contact-info-icon{width:52px;height:52px;border-radius:var(--radius-md);background:rgba(201,168,76,.1);border:1px solid rgba(201,168,76,.2);display:flex;align-items:center;justify-content:center;font-size:1.25rem;flex-shrink:0;}
+    .contact-info-label{font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-bottom:.25rem;}
+    .contact-info-value{font-size:.9375rem;color:var(--text-primary);font-weight:500;margin-bottom:.15rem;}
+    .contact-info-sub{font-size:.8rem;color:var(--text-muted);}
+    .hours-row{display:flex;justify-content:space-between;align-items:center;padding:.875rem 0;border-bottom:1px solid var(--border-subtle);font-size:.875rem;}
+    .hours-row:last-child{border-bottom:none;}
+    .map-container{border-radius:var(--radius-xl);overflow:hidden;border:1px solid var(--border-subtle);aspect-ratio:4/3;position:relative;background:var(--bg-elevated);}
+    .map-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(201,168,76,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(201,168,76,.06) 1px,transparent 1px);background-size:40px 40px;}
+    .map-pin{width:44px;height:44px;border-radius:50% 50% 50% 0;background:var(--gold-gradient);transform:rotate(-45deg);position:relative;box-shadow:0 4px 20px rgba(201,168,76,.4);}
+    .map-pin::after{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(45deg);width:16px;height:16px;border-radius:50%;background:#0a0a0a;}
+    .map-pulse{position:absolute;width:70px;height:70px;border-radius:50%;border:2px solid rgba(201,168,76,.4);animation:mapPulse 2s ease-out infinite;}
+    @keyframes mapPulse{0%{transform:scale(.5);opacity:1}100%{transform:scale(2);opacity:0}}
+    .qc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;margin-bottom:3rem;}
+    .qc-card{display:flex;flex-direction:column;align-items:center;text-align:center;padding:2rem 1.5rem;background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:var(--radius-lg);gap:.75rem;text-decoration:none;transition:all var(--transition);}
+    .qc-card:hover{border-color:var(--border);transform:translateY(-3px);box-shadow:var(--shadow-md);}
+    .qc-icon{width:60px;height:60px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.5rem;}
+    @media(max-width:1024px){.contact-layout{grid-template-columns:1fr;}}
+    @media(max-width:640px){.qc-grid{grid-template-columns:1fr;}}
+  </style>
+</head>
+<body>
+<div class="page-loader" id="pageLoader"><div class="loader-logo">MANGA AUTOS</div><div class="loader-bar"></div></div>
+<a href="https://wa.me/2348012345678" class="whatsapp-float" target="_blank"><i class="fab fa-whatsapp"></i></a>
+<div class="toast-container" id="toastContainer"></div>
+
+<nav class="navbar scrolled" id="navbar">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo"><span class="nav-logo-text">MANGA AUTOS</span><span class="nav-logo-sub">Luxury Automotive · Abuja</span></a>
+    <ul class="nav-links">
+      <li><a href="/" class="nav-link">Home</a></li>
+      <li><a href="/inventory" class="nav-link">Inventory</a></li>
+      <li><a href="/about" class="nav-link">About</a></li>
+      <li><a href="/contact" class="nav-link active">Contact</a></li>
+    </ul>
+    <div class="nav-actions">
+      <button class="theme-toggle" id="themeToggle"><i class="fas fa-sun"></i></button>
+      <a href="https://wa.me/2348012345678" target="_blank" class="nav-cta"><i class="fab fa-whatsapp"></i> WhatsApp Us</a>
+    </div>
+    <button class="mobile-menu-btn" id="menuBtn"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <nav class="mobile-nav-links">
+    <a href="/" class="mobile-nav-link">Home</a><a href="/inventory" class="mobile-nav-link">Inventory</a>
+    <a href="/about" class="mobile-nav-link">About</a><a href="/contact" class="mobile-nav-link">Contact</a>
+  </nav>
+</div>
+
+<div class="contact-hero">
+  <div class="container" style="position:relative;z-index:1;">
+    <div class="label" style="margin-bottom:.75rem;">Get In Touch</div>
+    <h1 class="display-xl">Let's <em style="font-style:italic;color:var(--gold);">Talk.</em></h1>
+    <p class="body-lg text-secondary" style="max-width:520px;margin-top:1rem;">Whether you're ready to purchase, just browsing, or want us to source a specific vehicle — our team is ready. Response within 30 minutes during business hours.</p>
+  </div>
+</div>
+
+<section class="section">
+  <div class="container">
+    <div class="qc-grid">
+      <a href="https://wa.me/2348012345678" target="_blank" class="qc-card">
+        <div class="qc-icon" style="background:rgba(37,211,102,.12);color:#25D366;"><i class="fab fa-whatsapp"></i></div>
+        <div style="font-weight:700;">WhatsApp</div>
+        <div style="font-size:.8rem;color:var(--text-secondary);">Fastest response · 8am–8pm daily</div>
+        <div style="font-size:.875rem;color:var(--gold);">+234 801 234 5678</div>
+      </a>
+      <a href="tel:+2348012345678" class="qc-card">
+        <div class="qc-icon" style="background:rgba(201,168,76,.1);color:var(--gold);"><i class="fas fa-phone"></i></div>
+        <div style="font-weight:700;">Call Us</div>
+        <div style="font-size:.8rem;color:var(--text-secondary);">Mon–Sat 8am–6pm · Sun 10am–4pm</div>
+        <div style="font-size:.875rem;color:var(--gold);">+234 801 234 5678</div>
+      </a>
+      <a href="mailto:hello@mangaautos.ng" class="qc-card">
+        <div class="qc-icon" style="background:rgba(100,150,255,.1);color:#6496ff;"><i class="fas fa-envelope"></i></div>
+        <div style="font-weight:700;">Email Us</div>
+        <div style="font-size:.8rem;color:var(--text-secondary);">Response within 2 business hours</div>
+        <div style="font-size:.875rem;color:var(--gold);">hello@mangaautos.ng</div>
+      </a>
+    </div>
+
+    <div class="contact-layout">
+      <div>
+        <div class="section-label"><span class="label">Send a Message</span></div>
+        <h2 class="display-lg" style="margin-bottom:1.5rem;">How Can We <em style="font-style:italic;color:var(--gold);">Help?</em></h2>
+        <form id="contactForm" style="display:flex;flex-direction:column;gap:1.25rem;">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+            <div class="form-group"><label class="form-label">Full Name *</label><input type="text" class="form-control" id="cName" required placeholder="Your full name"></div>
+            <div class="form-group"><label class="form-label">Phone *</label><input type="tel" class="form-control" id="cPhone" required placeholder="+234 801 234 5678"></div>
+          </div>
+          <div class="form-group"><label class="form-label">Email</label><input type="email" class="form-control" id="cEmail" placeholder="your@email.com"></div>
+          <div class="form-group">
+            <label class="form-label">Subject</label>
+            <select class="form-control" id="cSubject">
+              <option value="vehicle-inquiry">Vehicle Inquiry</option>
+              <option value="sourcing">Vehicle Sourcing Request</option>
+              <option value="inspection">Book Inspection</option>
+              <option value="financing">Financing Questions</option>
+              <option value="trade-in">Trade-In Enquiry</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          <div class="form-group"><label class="form-label">Vehicle of Interest</label><input type="text" class="form-control" id="cVehicle" placeholder="e.g. Mercedes GLE 450, or 'Not sure yet'"></div>
+          <div class="form-group"><label class="form-label">Message *</label><textarea class="form-control" id="cMessage" rows="5" required placeholder="Tell us what you're looking for, your budget range, any specific requirements..."></textarea></div>
+          <button type="submit" class="btn btn-primary btn-lg" style="align-self:flex-start;" id="contactSubmitBtn">Send Message <i class="fas fa-paper-plane"></i></button>
+        </form>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:1.5rem;">
+        <div class="map-container">
+          <div class="map-grid"></div>
+          <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1rem;z-index:2;">
+            <div style="position:relative;display:flex;align-items:center;justify-content:center;">
+              <div class="map-pulse"></div>
+              <div class="map-pin"></div>
+            </div>
+            <div style="text-align:center;">
+              <div style="font-weight:700;color:var(--text-primary);margin-bottom:.25rem;">Manga Autos Showroom</div>
+              <div style="font-size:.8rem;color:var(--text-secondary);margin-bottom:.75rem;">15 Gana Street, Maitama, Abuja FCT</div>
+              <a href="https://maps.google.com?q=Maitama+Abuja" target="_blank" class="btn btn-outline btn-sm"><i class="fas fa-directions"></i> Get Directions</a>
+            </div>
+          </div>
+        </div>
+
+        <a href="https://maps.google.com?q=15+Gana+Street+Maitama+Abuja" target="_blank" class="contact-info-card">
+          <div class="contact-info-icon"><i class="fas fa-map-marker-alt" style="color:var(--gold);"></i></div>
+          <div><div class="contact-info-label">Showroom Address</div><div class="contact-info-value">15 Gana Street, Maitama</div><div class="contact-info-sub">Abuja, FCT, Nigeria</div></div>
+        </a>
+        <a href="tel:+2348012345678" class="contact-info-card">
+          <div class="contact-info-icon"><i class="fas fa-phone" style="color:var(--gold);"></i></div>
+          <div><div class="contact-info-label">Phone</div><div class="contact-info-value">+234 801 234 5678</div><div class="contact-info-sub">Also available on WhatsApp</div></div>
+        </a>
+        <a href="mailto:hello@mangaautos.ng" class="contact-info-card">
+          <div class="contact-info-icon"><i class="fas fa-envelope" style="color:var(--gold);"></i></div>
+          <div><div class="contact-info-label">Email</div><div class="contact-info-value">hello@mangaautos.ng</div><div class="contact-info-sub">Response within 2 business hours</div></div>
+        </a>
+
+        <div style="background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:var(--radius-lg);padding:1.5rem;">
+          <div class="label" style="margin-bottom:1.25rem;">Business Hours</div>
+          <div class="hours-row"><span style="color:var(--text-secondary);">Monday – Friday</span><span style="color:var(--text-primary);font-weight:500;font-family:var(--font-mono);font-size:.8rem;">8:00 AM – 6:00 PM</span></div>
+          <div class="hours-row"><span style="color:var(--text-secondary);">Saturday</span><span style="color:var(--text-primary);font-weight:500;font-family:var(--font-mono);font-size:.8rem;">9:00 AM – 5:00 PM</span></div>
+          <div class="hours-row"><span style="color:var(--text-secondary);">Sunday</span><span style="color:var(--text-primary);font-weight:500;font-family:var(--font-mono);font-size:.8rem;">10:00 AM – 4:00 PM</span></div>
+          <div style="margin-top:1rem;padding:.875rem 1rem;background:rgba(201,168,76,.06);border:1px solid rgba(201,168,76,.15);border-radius:var(--radius-md);font-size:.8rem;color:var(--text-secondary);">
+            <span style="color:var(--gold);">✦</span> WhatsApp available outside hours for urgent enquiries.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="section" style="background:var(--bg-secondary);">
+  <div class="container">
+    <div class="section-header centered">
+      <div class="section-label" style="justify-content:center;"><span class="label">Common Questions</span></div>
+      <h2 class="display-lg">Frequently Asked <em style="font-style:italic;color:var(--gold);">Questions</em></h2>
+      <div class="divider centered"></div>
+    </div>
+    <div style="max-width:760px;margin:0 auto;display:flex;flex-direction:column;gap:.75rem;" id="faqList"></div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer-grid">
+    <div>
+      <div class="footer-logo">MANGA AUTOS</div>
+      <div class="footer-tagline">Premium Automotive · Abuja, Nigeria</div>
+      <p class="footer-desc">Abuja's most trusted luxury automotive dealership since 2018.</p>
+      <div class="footer-socials">
+        <a href="#" class="social-btn"><i class="fab fa-instagram"></i></a>
+        <a href="#" class="social-btn"><i class="fab fa-facebook"></i></a>
+        <a href="https://wa.me/2348012345678" target="_blank" class="social-btn"><i class="fab fa-whatsapp"></i></a>
+      </div>
+    </div>
+    <div><div class="footer-heading">Navigation</div><div class="footer-links"><a href="/" class="footer-link">Home</a><a href="/inventory" class="footer-link">Inventory</a><a href="/about" class="footer-link">About</a><a href="/contact" class="footer-link">Contact</a></div></div>
+    <div><div class="footer-heading">Services</div><div class="footer-links"><a href="#" class="footer-link">Vehicle Sourcing</a><a href="#" class="footer-link">Inspection</a><a href="#" class="footer-link">Financing</a></div></div>
+    <div>
+      <div class="footer-heading">Contact</div>
+      <div class="footer-contact-item"><i class="fas fa-map-marker-alt footer-contact-icon"></i><span>15 Gana Street, Maitama, Abuja FCT</span></div>
+      <div class="footer-contact-item"><i class="fas fa-phone footer-contact-icon"></i><span>+234 801 234 5678</span></div>
+      <div class="footer-contact-item"><i class="fas fa-envelope footer-contact-icon"></i><span>hello@mangaautos.ng</span></div>
+    </div>
+  </div>
+  <div class="footer-bottom"><span class="footer-copy">© 2024 Manga Autos. All rights reserved.</span></div>
+</footer>
+
+<script src="/js/core.js"></script>
+<script>
+document.getElementById('contactForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const btn = document.getElementById('contactSubmitBtn');
+  const orig = btn.innerHTML;
+  btn.innerHTML = 'Sending... <i class="fas fa-spinner fa-spin"></i>';
+  btn.disabled = true;
+  try {
+    await API.post('/bookings', {
+      name: document.getElementById('cName').value,
+      phone: document.getElementById('cPhone').value,
+      email: document.getElementById('cEmail').value,
+      subject: document.getElementById('cSubject').value,
+      vehicle: document.getElementById('cVehicle').value,
+      notes: document.getElementById('cMessage').value,
+      type: 'contact',
+    });
+    Toast.show("Message sent! We'll respond within 2 hours.", 'success');
+    e.target.reset();
+  } catch(err) {
+    Toast.show('Failed. Please WhatsApp us directly.', 'error');
+  } finally { btn.innerHTML = orig; btn.disabled = false; }
+});
+
+const faqs = [
+  { q: 'Do you sell brand new vehicles?', a: 'We primarily deal in foreign used and Nigerian used premium vehicles. However, we can source brand new vehicles on request through our dealer partnerships.' },
+  { q: 'How do I know vehicles are genuine and not accident-damaged?', a: 'Every vehicle undergoes our 200-point inspection. We provide full vehicle history reports, VIN verification, and accident history disclosure before any purchase.' },
+  { q: 'Can you source a vehicle not in your current inventory?', a: 'Absolutely! Vehicle sourcing is a core service. Tell us the make, model, year, and specs you want and we\'ll source from our global auction network. Most requests fulfilled within 4–8 weeks.' },
+  { q: 'What financing options are available?', a: 'We partner with leading Nigerian banks for competitive auto loans — typically 12–22% p.a. with 12–60 month repayment. Minimum 20–30% down payment. Approval decisions within 48 hours.' },
+  { q: 'Do you offer trade-ins?', a: 'Yes! We accept trade-ins on qualifying vehicles. WhatsApp us photos of your vehicle for a fair market valuation that can offset your new purchase.' },
+  { q: 'How long does the purchasing process take?', a: 'For in-stock vehicles, typically 24–72 hours from inspection to delivery. This includes documentation, payment processing, registration, and logistics.' },
+];
+
+const faqList = document.getElementById('faqList');
+faqList.innerHTML = faqs.map((faq, i) => `
+  <div style="background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:var(--radius-lg);overflow:hidden;" id="faq-${i}">
+    <button onclick="toggleFaq(${i})" style="width:100%;padding:1.25rem 1.5rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;text-align:left;background:none;border:none;cursor:pointer;color:var(--text-primary);">
+      <span style="font-weight:600;font-size:.9375rem;">${faq.q}</span>
+      <span style="color:var(--gold);font-size:1rem;flex-shrink:0;transition:transform 0.3s;" id="faq-icon-${i}">+</span>
+    </button>
+    <div id="faq-body-${i}" style="max-height:0;overflow:hidden;transition:max-height 0.4s ease;">
+      <p style="padding:0 1.5rem 1.25rem;font-size:.875rem;color:var(--text-secondary);line-height:1.75;">${faq.a}</p>
+    </div>
+  </div>`).join('');
+
+function toggleFaq(i) {
+  const body = document.getElementById('faq-body-'+i);
+  const icon = document.getElementById('faq-icon-'+i);
+  const isOpen = body.style.maxHeight && body.style.maxHeight !== '0px';
+  faqs.forEach((_,j) => {
+    document.getElementById('faq-body-'+j).style.maxHeight = '0';
+    document.getElementById('faq-icon-'+j).textContent = '+';
+    document.getElementById('faq-'+j).style.borderColor = '';
+  });
+  if (!isOpen) {
+    body.style.maxHeight = body.scrollHeight + 'px';
+    icon.textContent = '−';
+    document.getElementById('faq-'+i).style.borderColor = 'rgba(201,168,76,.35)';
+  }
+}
+</script>
+</body>
+</html>

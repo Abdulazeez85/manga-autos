@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About Us — Manga Autos | Premium Dealership Abuja</title>
+  <meta name="description" content="Learn about Manga Autos — Abuja's premier luxury automotive dealership since 2018. CAC registered, trusted by 247+ clients across Nigeria.">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="/css/main.css">
+  <style>
+    .about-hero {
+      min-height: 60vh;
+      display: flex;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+      padding: calc(var(--nav-height) + 4rem) clamp(1.5rem,5vw,3rem) 4rem;
+    }
+    .about-hero::before {
+      content:'';
+      position:absolute;
+      inset:0;
+      background:linear-gradient(135deg,#050505 0%,#0f0d05 60%,#080808 100%);
+    }
+    .about-hero::after {
+      content:'';
+      position:absolute;
+      inset:0;
+      background:radial-gradient(ellipse at 70% 50%, rgba(201,168,76,0.07) 0%, transparent 55%);
+    }
+    .timeline { position:relative; padding-left:3rem; }
+    .timeline::before {
+      content:''; position:absolute; left:0; top:0; bottom:0; width:1px;
+      background:linear-gradient(to bottom, var(--gold), transparent);
+    }
+    .timeline-item { position:relative; margin-bottom:2.5rem; }
+    .timeline-item::before {
+      content:''; position:absolute; left:-3.375rem; top:0.35rem;
+      width:10px; height:10px; border-radius:50%;
+      background:var(--gold); border:2px solid var(--bg-primary);
+      box-shadow:0 0 0 3px rgba(201,168,76,0.2);
+    }
+    .timeline-year { font-size:0.65rem; font-weight:700; letter-spacing:0.15em; color:var(--gold); text-transform:uppercase; margin-bottom:0.3rem; }
+    .timeline-title { font-weight:600; color:var(--text-primary); margin-bottom:0.4rem; }
+    .timeline-desc { font-size:0.875rem; color:var(--text-secondary); line-height:1.65; }
+    .team-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:1.5rem; }
+    .team-card {
+      background:var(--bg-card); border:1px solid var(--border-subtle);
+      border-radius:var(--radius-lg); padding:2rem 1.5rem; text-align:center; transition:all var(--transition);
+    }
+    .team-card:hover { border-color:var(--border); transform:translateY(-4px); box-shadow:var(--shadow-md); }
+    .team-avatar {
+      width:80px; height:80px; border-radius:50%; margin:0 auto 1.25rem;
+      background:var(--gold-gradient); display:flex; align-items:center; justify-content:center;
+      font-family:var(--font-display); font-size:2rem; font-weight:600; color:#0a0a0a;
+    }
+    .team-name { font-weight:700; color:var(--text-primary); margin-bottom:0.25rem; }
+    .team-role { font-size:0.7rem; color:var(--gold); letter-spacing:0.1em; text-transform:uppercase; margin-bottom:0.75rem; }
+    .team-bio { font-size:0.8rem; color:var(--text-secondary); line-height:1.6; }
+    .values-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1.5rem; }
+    .value-card {
+      padding:2.5rem 2rem; border:1px solid var(--border-subtle);
+      border-radius:var(--radius-lg); position:relative; overflow:hidden; transition:all var(--transition);
+    }
+    .value-card::before {
+      content:attr(data-number); position:absolute; top:-0.5rem; right:1rem;
+      font-family:var(--font-display); font-size:6rem; font-weight:700;
+      color:rgba(201,168,76,0.04); line-height:1; pointer-events:none;
+    }
+    .value-card:hover { border-color:var(--border); background:var(--bg-card); }
+    @media (max-width:1024px) {
+      .mission-grid { grid-template-columns:1fr!important; }
+      .story-grid { grid-template-columns:1fr!important; }
+    }
+    @media (max-width:768px) {
+      .values-grid { grid-template-columns:1fr; }
+    }
+  </style>
+</head>
+<body>
+<div class="page-loader" id="pageLoader"><div class="loader-logo">MANGA AUTOS</div><div class="loader-bar"></div></div>
+<a href="https://wa.me/2348012345678" class="whatsapp-float" target="_blank"><i class="fab fa-whatsapp"></i></a>
+<div class="toast-container" id="toastContainer"></div>
+
+<nav class="navbar scrolled" id="navbar">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">
+      <span class="nav-logo-text">MANGA AUTOS</span>
+      <span class="nav-logo-sub">Luxury Automotive · Abuja</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/" class="nav-link">Home</a></li>
+      <li><a href="/inventory" class="nav-link">Inventory</a></li>
+      <li><a href="/about" class="nav-link active">About</a></li>
+      <li><a href="/contact" class="nav-link">Contact</a></li>
+    </ul>
+    <div class="nav-actions">
+      <button class="theme-toggle" id="themeToggle"><i class="fas fa-sun"></i></button>
+      <button class="wishlist-btn"><i class="fas fa-heart"></i><span class="wishlist-count" id="wishlistCount">0</span></button>
+      <a href="https://wa.me/2348012345678" target="_blank" class="nav-cta"><i class="fab fa-whatsapp"></i> WhatsApp Us</a>
+    </div>
+    <button class="mobile-menu-btn" id="menuBtn"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <nav class="mobile-nav-links">
+    <a href="/" class="mobile-nav-link">Home</a>
+    <a href="/inventory" class="mobile-nav-link">Inventory</a>
+    <a href="/about" class="mobile-nav-link">About Us</a>
+    <a href="/contact" class="mobile-nav-link">Contact</a>
+  </nav>
+</div>
+
+<!-- HERO -->
+<div class="about-hero">
+  <div style="position:relative;z-index:2;max-width:var(--max-width);margin:0 auto;width:100%;">
+    <div class="label" style="margin-bottom:1rem;animation:fadeInDown 0.8s ease both;">Our Story</div>
+    <h1 style="font-family:var(--font-display);font-size:clamp(3rem,8vw,7rem);font-weight:300;line-height:0.9;color:#fff;animation:fadeInUp 0.9s ease 0.1s both;">
+      Built on<br><em style="font-style:italic;color:var(--gold);">Trust.</em>
+    </h1>
+    <p style="font-size:clamp(1rem,2vw,1.2rem);color:rgba(255,255,255,0.55);max-width:520px;line-height:1.7;margin-top:2rem;font-weight:300;animation:fadeInUp 0.9s ease 0.2s both;">
+      Since 2018, Manga Autos has been redefining what it means to buy a premium vehicle in Nigeria. No shortcuts. No compromises. Just excellence.
+    </p>
+    <div style="display:flex;gap:1rem;margin-top:2.5rem;flex-wrap:wrap;animation:fadeInUp 0.9s ease 0.3s both;">
+      <a href="/inventory" class="btn btn-primary btn-lg">Browse Inventory</a>
+      <a href="/contact" class="btn btn-outline btn-lg">Visit Showroom</a>
+    </div>
+  </div>
+</div>
+
+<!-- MISSION -->
+<section class="section">
+  <div class="container">
+    <div class="mission-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:center;">
+      <div class="reveal">
+        <div class="section-label"><span class="label">Our Mission</span></div>
+        <h2 class="display-lg">Elevating Automotive <em style="color:var(--gold);">Standards</em></h2>
+        <div class="divider"></div>
+        <p style="color:var(--text-secondary);line-height:1.85;margin-bottom:1.5rem;font-size:0.9375rem;">
+          Manga Autos was founded on a simple but powerful belief: every Nigerian who invests in a premium vehicle deserves a world-class buying experience. No hidden charges. No pressure. No surprises after the sale.
+        </p>
+        <p style="color:var(--text-secondary);line-height:1.85;margin-bottom:2rem;font-size:0.9375rem;">
+          We're not just a dealership. We're your long-term automotive partner — from the first enquiry to your fifth vehicle and beyond.
+        </p>
+        <div style="display:flex;gap:2rem;flex-wrap:wrap;">
+          <div>
+            <div style="font-family:var(--font-display);font-size:2.5rem;color:var(--gold);" data-counter data-target="2018">2018</div>
+            <div style="font-size:0.7rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.08em;">Founded</div>
+          </div>
+          <div>
+            <div style="font-family:var(--font-display);font-size:2.5rem;color:var(--gold);" data-counter data-target="247" data-suffix="+">247+</div>
+            <div style="font-size:0.7rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.08em;">Happy Clients</div>
+          </div>
+          <div>
+            <div style="font-family:var(--font-display);font-size:2.5rem;color:var(--gold);" data-counter data-target="500" data-suffix="+">500+</div>
+            <div style="font-size:0.7rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.08em;">Cars Sold</div>
+          </div>
+        </div>
+      </div>
+      <div class="reveal" style="display:flex;flex-direction:column;gap:1rem;">
+        <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-xl);padding:2rem;position:relative;overflow:hidden;">
+          <div style="position:absolute;top:-20px;right:-20px;width:100px;height:100px;background:radial-gradient(circle,rgba(201,168,76,0.1),transparent);pointer-events:none;"></div>
+          <div style="display:flex;align-items:center;gap:1rem;margin-bottom:1.25rem;">
+            <div style="width:48px;height:48px;border-radius:var(--radius-md);background:rgba(37,211,102,0.1);border:1px solid rgba(37,211,102,0.3);display:flex;align-items:center;justify-content:center;color:#25D366;font-size:1.25rem;flex-shrink:0;">✓</div>
+            <div>
+              <div style="font-weight:700;color:var(--text-primary);">CAC Registered Business</div>
+              <div style="font-size:0.75rem;color:var(--text-muted);">Corporate Affairs Commission Nigeria</div>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;font-size:0.8rem;">
+            <div><div style="color:var(--text-muted);margin-bottom:0.2rem;">Reg. Number</div><div style="color:var(--text-primary);font-family:var(--font-mono);">RC-2018047</div></div>
+            <div><div style="color:var(--text-muted);margin-bottom:0.2rem;">Year Reg.</div><div style="color:var(--text-primary);">2018</div></div>
+            <div><div style="color:var(--text-muted);margin-bottom:0.2rem;">Business Type</div><div style="color:var(--text-primary);">Limited Company</div></div>
+            <div><div style="color:var(--text-muted);margin-bottom:0.2rem;">State</div><div style="color:var(--text-primary);">FCT Abuja</div></div>
+          </div>
+        </div>
+        <div style="background:rgba(201,168,76,0.05);border:1px solid rgba(201,168,76,0.2);border-radius:var(--radius-lg);padding:1.5rem;">
+          <div class="label" style="margin-bottom:1rem;">Recognition</div>
+          <div style="display:flex;flex-direction:column;gap:0.75rem;">
+            <div style="display:flex;align-items:center;gap:0.75rem;font-size:0.875rem;color:var(--text-secondary);"><span style="color:var(--gold);">🏆</span> Top Dealership — Abuja Business Awards 2023</div>
+            <div style="display:flex;align-items:center;gap:0.75rem;font-size:0.875rem;color:var(--text-secondary);"><span style="color:var(--gold);">⭐</span> 4.9/5 Average Customer Rating</div>
+            <div style="display:flex;align-items:center;gap:0.75rem;font-size:0.875rem;color:var(--text-secondary);"><span style="color:var(--gold);">🚗</span> Authorized Foreign Used Vehicle Reseller</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- VALUES -->
+<section class="section" style="background:var(--bg-secondary);">
+  <div class="container">
+    <div class="section-header centered">
+      <div class="section-label" style="justify-content:center;"><span class="label">What We Stand For</span></div>
+      <h2 class="display-lg">Our Core <em style="font-style:italic;color:var(--gold);">Values</em></h2>
+      <div class="divider centered"></div>
+    </div>
+    <div class="values-grid">
+      <div class="value-card reveal" data-number="01">
+        <div style="font-size:2rem;margin-bottom:1rem;">🔒</div>
+        <h3 style="font-size:1.125rem;font-weight:700;color:var(--text-primary);margin-bottom:0.75rem;">Integrity First</h3>
+        <p style="color:var(--text-secondary);font-size:0.875rem;line-height:1.7;">We disclose everything — mileage, history, condition, origin. What you see is exactly what you get. Our reputation is worth more than any single sale.</p>
+      </div>
+      <div class="value-card reveal" data-number="02">
+        <div style="font-size:2rem;margin-bottom:1rem;">💎</div>
+        <h3 style="font-size:1.125rem;font-weight:700;color:var(--text-primary);margin-bottom:0.75rem;">Uncompromising Quality</h3>
+        <p style="color:var(--text-secondary);font-size:0.875rem;line-height:1.7;">We reject more vehicles than we accept. Every car in our inventory meets our strict standards. If it doesn't pass inspection, it never reaches our showroom.</p>
+      </div>
+      <div class="value-card reveal" data-number="03">
+        <div style="font-size:2rem;margin-bottom:1rem;">🤝</div>
+        <h3 style="font-size:1.125rem;font-weight:700;color:var(--text-primary);margin-bottom:0.75rem;">Client Partnership</h3>
+        <p style="color:var(--text-secondary);font-size:0.875rem;line-height:1.7;">We build relationships, not just transactions. Our team is available long after your purchase for servicing referrals, trade-ins, and any support you need.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TIMELINE + STORY -->
+<section class="section">
+  <div class="container">
+    <div class="story-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:start;">
+      <div>
+        <div class="section-label"><span class="label">Our Journey</span></div>
+        <h2 class="display-lg">From <em style="color:var(--gold);">Vision</em><br>to Reality</h2>
+        <div class="divider"></div>
+        <p style="color:var(--text-secondary);line-height:1.8;font-size:0.9375rem;margin-bottom:2rem;">
+          Six years of growth, learning, and relentless pursuit of excellence. Here's how Manga Autos became Abuja's most trusted name in premium automotive.
+        </p>
+        <a href="/contact" class="btn btn-outline">Visit Our Showroom →</a>
+      </div>
+      <div class="timeline reveal">
+        <div class="timeline-item">
+          <div class="timeline-year">2018 — Foundation</div>
+          <div class="timeline-title">Manga Autos Is Born</div>
+          <div class="timeline-desc">Founded by automotive enthusiasts with a mission to bring transparency to Nigeria's premium car market. CAC registered in Abuja FCT.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-year">2019 — Growth</div>
+          <div class="timeline-title">First 50 Clients</div>
+          <div class="timeline-desc">Word-of-mouth referrals drive rapid early growth. First formal partnerships established with USA and UAE auction houses.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-year">2021 — Digital</div>
+          <div class="timeline-title">Online Showroom Launched</div>
+          <div class="timeline-desc">Full online inventory system with inspection reports. WhatsApp-first customer service model introduced across all touchpoints.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-year">2022 — Milestone</div>
+          <div class="timeline-title">100+ Vehicles Delivered</div>
+          <div class="timeline-desc">Crossed the landmark of 100 successful deliveries. Expanded sourcing to Germany and the United Kingdom.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-year">2023 — Award</div>
+          <div class="timeline-title">Top Dealership Recognized</div>
+          <div class="timeline-desc">Named Abuja's top automotive dealership at the Business Excellence Awards. 247+ satisfied clients and growing.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-year">2024 — Present</div>
+          <div class="timeline-title">Raising the Standard</div>
+          <div class="timeline-desc">Largest premium inventory in Abuja. Bank financing partnerships launched. New showroom expansion underway.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TEAM -->
+<section class="section" style="background:var(--bg-secondary);">
+  <div class="container">
+    <div class="section-header centered">
+      <div class="section-label" style="justify-content:center;"><span class="label">The People</span></div>
+      <h2 class="display-lg">Meet Our <em style="font-style:italic;color:var(--gold);">Team</em></h2>
+      <div class="divider centered"></div>
+      <p class="body-lg text-secondary" style="max-width:480px;margin:0 auto;">Passionate automotive professionals dedicated to your perfect buying experience.</p>
+    </div>
+    <div class="team-grid">
+      <div class="team-card reveal">
+        <div class="team-avatar">AM</div>
+        <div class="team-name">Alhaji Manga</div>
+        <div class="team-role">Founder & CEO</div>
+        <div class="team-bio">20 years in the automotive industry. Former importer with deep connections in US and UAE auction markets.</div>
+      </div>
+      <div class="team-card reveal">
+        <div class="team-avatar">FK</div>
+        <div class="team-name">Fatima Kalu</div>
+        <div class="team-role">Head of Sales</div>
+        <div class="team-bio">Expert in luxury vehicles with 10 years experience helping Abuja's elite find their perfect automotive match.</div>
+      </div>
+      <div class="team-card reveal">
+        <div class="team-avatar">EO</div>
+        <div class="team-name">Engr. Emeka Ojo</div>
+        <div class="team-role">Chief Inspector</div>
+        <div class="team-bio">NADDC-certified automotive engineer. Leads our rigorous 200-point vehicle inspection process.</div>
+      </div>
+      <div class="team-card reveal">
+        <div class="team-avatar">BI</div>
+        <div class="team-name">Bashir Ibrahim</div>
+        <div class="team-role">Logistics Manager</div>
+        <div class="team-bio">Oversees all vehicle importation, port clearing, and last-mile delivery across Abuja and Nigeria.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="section">
+  <div class="container">
+    <div class="cta-banner reveal">
+      <div class="label" style="margin-bottom:1rem;">Join Our Family</div>
+      <h2 class="display-xl">Experience the <em style="font-style:italic;color:var(--gold);">Difference</em></h2>
+      <div class="divider centered"></div>
+      <p class="body-lg text-secondary" style="max-width:500px;margin:0 auto 2rem;">Ready to find your dream vehicle? Our team is standing by to guide you through every step of the journey.</p>
+      <div class="cta-actions">
+        <a href="/inventory" class="btn btn-primary btn-lg">Browse Inventory</a>
+        <a href="https://wa.me/2348012345678" target="_blank" class="btn btn-whatsapp btn-lg"><i class="fab fa-whatsapp"></i> Chat With Us</a>
+        <a href="/contact" class="btn btn-outline btn-lg">Contact Us</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer-grid">
+    <div>
+      <div class="footer-logo">MANGA AUTOS</div>
+      <div class="footer-tagline">Premium Automotive · Abuja, Nigeria</div>
+      <p class="footer-desc">Abuja's most trusted luxury automotive dealership since 2018.</p>
+      <div class="footer-socials">
+        <a href="#" class="social-btn"><i class="fab fa-instagram"></i></a>
+        <a href="#" class="social-btn"><i class="fab fa-facebook"></i></a>
+        <a href="https://wa.me/2348012345678" target="_blank" class="social-btn"><i class="fab fa-whatsapp"></i></a>
+      </div>
+    </div>
+    <div>
+      <div class="footer-heading">Navigation</div>
+      <div class="footer-links">
+        <a href="/" class="footer-link">Home</a>
+        <a href="/inventory" class="footer-link">Inventory</a>
+        <a href="/about" class="footer-link">About Us</a>
+        <a href="/contact" class="footer-link">Contact</a>
+      </div>
+    </div>
+    <div>
+      <div class="footer-heading">Services</div>
+      <div class="footer-links">
+        <a href="#" class="footer-link">Vehicle Sourcing</a>
+        <a href="#" class="footer-link">Inspection</a>
+        <a href="#" class="footer-link">Financing</a>
+        <a href="#" class="footer-link">Trade-In</a>
+      </div>
+    </div>
+    <div>
+      <div class="footer-heading">Contact Us</div>
+      <div class="footer-contact-item"><i class="fas fa-map-marker-alt footer-contact-icon"></i><span>15 Gana Street, Maitama, Abuja FCT</span></div>
+      <div class="footer-contact-item"><i class="fas fa-phone footer-contact-icon"></i><span>+234 801 234 5678</span></div>
+      <div class="footer-contact-item"><i class="fas fa-envelope footer-contact-icon"></i><span>hello@mangaautos.ng</span></div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-copy">© 2024 Manga Autos. All rights reserved. CAC Reg. RC-2018047</span>
+    <div class="footer-legal"><a href="#">Privacy Policy</a><a href="#">Terms</a></div>
+  </div>
+</footer>
+<script src="/js/core.js"></script>
+</body>
+</html>

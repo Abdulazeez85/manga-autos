@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inventory — Manga Autos | Luxury Cars For Sale In Abuja</title>
+  <meta name="description" content="Browse Manga Autos' premium inventory. Luxury cars for sale in Abuja — Mercedes-Benz, BMW, Tesla, Range Rover and more. Foreign used vehicles with full inspection.">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="/css/main.css">
+  <style>
+    .page-hero {
+      padding: calc(var(--nav-height) + 3rem) clamp(1.5rem,5vw,3rem) 3rem;
+      background: var(--bg-secondary);
+      border-bottom: 1px solid var(--border-subtle);
+      position: relative;
+      overflow: hidden;
+    }
+    .page-hero::before {
+      content:'';
+      position:absolute;
+      inset:0;
+      background:radial-gradient(ellipse at 80% 50%, rgba(201,168,76,0.05) 0%, transparent 55%);
+    }
+    .page-hero-inner {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+    .compare-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 800;
+      background: var(--bg-card);
+      border-top: 1px solid var(--border);
+      padding: 1rem clamp(1.5rem,5vw,3rem);
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      box-shadow: 0 -8px 32px rgba(0,0,0,0.4);
+    }
+    .compare-bar.active { display: flex; }
+    .compare-items { display: flex; gap: 0.75rem; }
+    .compare-slot {
+      width: 80px;
+      height: 60px;
+      border: 1px dashed var(--border);
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.65rem;
+      color: var(--text-muted);
+      text-align: center;
+      overflow: hidden;
+      position: relative;
+    }
+    .compare-slot.filled {
+      border-style: solid;
+      border-color: var(--gold);
+      font-size: 0.7rem;
+      color: var(--text-primary);
+      flex-direction: column;
+      gap: 0.2rem;
+      padding: 0.25rem;
+    }
+    .compare-slot .remove-compare {
+      position: absolute;
+      top: 2px;
+      right: 2px;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: rgba(255,80,80,0.7);
+      color: #fff;
+      font-size: 0.6rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+    .filter-mobile-toggle {
+      display: none;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.25rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      color: var(--text-secondary);
+      font-size: 0.875rem;
+      font-weight: 500;
+      cursor: pointer;
+    }
+    .results-count {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+    .results-count strong { color: var(--gold); }
+    .active-filters {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-top: 0.75rem;
+    }
+    .filter-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.25rem 0.75rem;
+      background: rgba(201,168,76,0.1);
+      border: 1px solid rgba(201,168,76,0.25);
+      border-radius: var(--radius-pill);
+      font-size: 0.72rem;
+      color: var(--gold);
+      cursor: pointer;
+    }
+    .filter-tag:hover { background: rgba(201,168,76,0.18); }
+    .list-view .cars-grid {
+      grid-template-columns: 1fr;
+    }
+    .list-view .car-card {
+      display: grid;
+      grid-template-columns: 300px 1fr;
+    }
+    .list-view .car-card-image {
+      aspect-ratio: unset;
+      height: 100%;
+      min-height: 200px;
+    }
+    .no-results {
+      grid-column: 1/-1;
+      text-align: center;
+      padding: 5rem 2rem;
+    }
+    .no-results-icon { font-size: 4rem; margin-bottom: 1rem; opacity: 0.4; }
+    .price-range {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+    }
+    .price-range input {
+      width: 100%;
+      padding: 0.5rem 0.75rem;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      color: var(--text-primary);
+      font-size: 0.8rem;
+      outline: none;
+    }
+    .price-range input:focus { border-color: var(--gold); }
+    @media (max-width: 1024px) {
+      .filter-mobile-toggle { display: flex; }
+      .list-view .car-card { grid-template-columns: 1fr; }
+      .list-view .car-card-image { height: 220px; }
+    }
+  </style>
+</head>
+<body>
+<div class="page-loader" id="pageLoader">
+  <div class="loader-logo">MANGA AUTOS</div>
+  <div class="loader-bar"></div>
+</div>
+
+<a href="https://wa.me/2348012345678?text=Hello%20Manga%20Autos!" class="whatsapp-float" target="_blank">
+  <i class="fab fa-whatsapp"></i>
+</a>
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- NAVBAR -->
+<nav class="navbar scrolled" id="navbar">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">
+      <span class="nav-logo-text">MANGA AUTOS</span>
+      <span class="nav-logo-sub">Luxury Automotive · Abuja</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/" class="nav-link">Home</a></li>
+      <li><a href="/inventory" class="nav-link active">Inventory</a></li>
+      <li><a href="/about" class="nav-link">About</a></li>
+      <li><a href="/contact" class="nav-link">Contact</a></li>
+    </ul>
+    <div class="nav-actions">
+      <button class="theme-toggle" id="themeToggle"><i class="fas fa-sun"></i></button>
+      <button class="wishlist-btn" id="wishlistBtn" title="Wishlist">
+        <i class="fas fa-heart"></i>
+        <span class="wishlist-count" id="wishlistCount">0</span>
+      </button>
+      <a href="https://wa.me/2348012345678" target="_blank" class="nav-cta">
+        <i class="fab fa-whatsapp"></i> WhatsApp Us
+      </a>
+    </div>
+    <button class="mobile-menu-btn" id="menuBtn"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <nav class="mobile-nav-links">
+    <a href="/" class="mobile-nav-link">Home</a>
+    <a href="/inventory" class="mobile-nav-link">Inventory</a>
+    <a href="/about" class="mobile-nav-link">About Us</a>
+    <a href="/contact" class="mobile-nav-link">Contact</a>
+  </nav>
+</div>
+
+<!-- PAGE HERO -->
+<div class="page-hero">
+  <div class="page-hero-inner">
+    <div class="label" style="margin-bottom:0.75rem;">Premium Collection</div>
+    <h1 class="display-xl">Our <em style="font-style:italic;color:var(--gold);">Inventory</em></h1>
+    <p class="body-lg text-secondary" style="max-width:520px;margin-top:1rem;">
+      Every vehicle verified, inspected, and ready for delivery. Filter by brand, price, or specs to find your perfect match.
+    </p>
+    <!-- Breadcrumb -->
+    <div style="display:flex;align-items:center;gap:0.5rem;margin-top:1.5rem;font-size:0.8rem;color:var(--text-muted);">
+      <a href="/" style="color:var(--text-muted);transition:color 0.3s;" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='var(--text-muted)'">Home</a>
+      <span>/</span>
+      <span style="color:var(--text-primary);">Inventory</span>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN INVENTORY LAYOUT -->
+<div class="section">
+  <div class="container">
+    <!-- Mobile filter toggle -->
+    <div style="display:flex;gap:1rem;margin-bottom:1.5rem;align-items:center;" class="d-mobile">
+      <button class="filter-mobile-toggle" id="filterToggle" onclick="toggleMobileFilters()">
+        <i class="fas fa-sliders-h"></i> Filters
+      </button>
+      <div class="search-bar" style="flex:1;">
+        <i class="fas fa-search" style="color:var(--text-muted);font-size:0.875rem;"></i>
+        <input type="text" id="searchInput" placeholder="Search vehicles, brands, models..." oninput="handleSearch()">
+      </div>
+    </div>
+
+    <div class="inventory-layout" id="inventoryLayout">
+
+      <!-- SIDEBAR FILTERS -->
+      <aside class="filters-sidebar" id="filtersSidebar">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;">
+          <div class="label">Filters</div>
+          <button onclick="clearAllFilters()" style="font-size:0.75rem;color:var(--text-muted);text-decoration:underline;background:none;border:none;cursor:pointer;">Clear All</button>
+        </div>
+
+        <!-- Search (desktop) -->
+        <div class="filter-group">
+          <div class="filter-group-title">Search</div>
+          <div class="search-bar">
+            <i class="fas fa-search" style="color:var(--text-muted);font-size:0.8rem;"></i>
+            <input type="text" id="searchInputDesktop" placeholder="Brand, model, year..." oninput="handleSearch()">
+          </div>
+        </div>
+
+        <!-- Brand -->
+        <div class="filter-group">
+          <div class="filter-group-title">Brand</div>
+          <label class="filter-option"><input type="checkbox" value="Mercedes-Benz" onchange="applyFilters()"> Mercedes-Benz</label>
+          <label class="filter-option"><input type="checkbox" value="BMW" onchange="applyFilters()"> BMW</label>
+          <label class="filter-option"><input type="checkbox" value="Tesla" onchange="applyFilters()"> Tesla</label>
+          <label class="filter-option"><input type="checkbox" value="Range Rover" onchange="applyFilters()"> Range Rover</label>
+          <label class="filter-option"><input type="checkbox" value="Porsche" onchange="applyFilters()"> Porsche</label>
+          <label class="filter-option"><input type="checkbox" value="Lexus" onchange="applyFilters()"> Lexus</label>
+        </div>
+
+        <!-- Price Range -->
+        <div class="filter-group">
+          <div class="filter-group-title">Price Range (₦)</div>
+          <div class="price-range">
+            <input type="number" id="minPrice" placeholder="Min" oninput="applyFilters()" step="5000000">
+            <span style="color:var(--text-muted);font-size:0.8rem;">–</span>
+            <input type="number" id="maxPrice" placeholder="Max" oninput="applyFilters()" step="5000000">
+          </div>
+        </div>
+
+        <!-- Condition -->
+        <div class="filter-group">
+          <div class="filter-group-title">Condition</div>
+          <label class="filter-option"><input type="checkbox" value="Foreign Used" onchange="applyFilters()"> Foreign Used</label>
+          <label class="filter-option"><input type="checkbox" value="Nigerian Used" onchange="applyFilters()"> Nigerian Used</label>
+          <label class="filter-option"><input type="checkbox" value="Brand New" onchange="applyFilters()"> Brand New</label>
+        </div>
+
+        <!-- Fuel Type -->
+        <div class="filter-group">
+          <div class="filter-group-title">Fuel Type</div>
+          <label class="filter-option"><input type="checkbox" value="Petrol" onchange="applyFilters()"> Petrol</label>
+          <label class="filter-option"><input type="checkbox" value="Diesel" onchange="applyFilters()"> Diesel</label>
+          <label class="filter-option"><input type="checkbox" value="Electric" onchange="applyFilters()"> Electric</label>
+          <label class="filter-option"><input type="checkbox" value="Hybrid" onchange="applyFilters()"> Hybrid</label>
+        </div>
+
+        <!-- Transmission -->
+        <div class="filter-group">
+          <div class="filter-group-title">Transmission</div>
+          <label class="filter-option"><input type="checkbox" value="Automatic" onchange="applyFilters()"> Automatic</label>
+          <label class="filter-option"><input type="checkbox" value="Manual" onchange="applyFilters()"> Manual</label>
+        </div>
+
+        <!-- Year -->
+        <div class="filter-group">
+          <div class="filter-group-title">Year</div>
+          <div class="price-range">
+            <input type="number" id="minYear" placeholder="From" oninput="applyFilters()" min="2015" max="2024">
+            <span style="color:var(--text-muted);font-size:0.8rem;">–</span>
+            <input type="number" id="maxYear" placeholder="To" oninput="applyFilters()" min="2015" max="2024">
+          </div>
+        </div>
+
+        <!-- WhatsApp CTA in Sidebar -->
+        <div style="padding:1.25rem;background:rgba(37,211,102,0.07);border:1px solid rgba(37,211,102,0.2);border-radius:var(--radius-md);margin-top:0.5rem;">
+          <div style="font-size:0.7rem;font-weight:700;letter-spacing:0.08em;color:#25D366;margin-bottom:0.5rem;">CAN'T FIND IT?</div>
+          <p style="font-size:0.8rem;color:var(--text-secondary);margin-bottom:0.75rem;line-height:1.5;">We source any vehicle on request. Tell us what you need.</p>
+          <a href="https://wa.me/2348012345678?text=I'm%20looking%20for%20a%20specific%20vehicle%20not%20in%20your%20inventory." target="_blank"
+             class="btn btn-whatsapp btn-sm" style="width:100%;justify-content:center;">
+            <i class="fab fa-whatsapp"></i> Request Vehicle
+          </a>
+        </div>
+      </aside>
+
+      <!-- INVENTORY CONTENT -->
+      <div>
+        <!-- Toolbar -->
+        <div class="inventory-toolbar">
+          <div>
+            <div class="results-count" id="resultsCount">Loading vehicles...</div>
+            <div class="active-filters" id="activeFilters"></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:0.75rem;">
+            <select class="sort-select" id="sortSelect" onchange="applyFilters()">
+              <option value="latest">Latest First</option>
+              <option value="price_asc">Price: Low to High</option>
+              <option value="price_desc">Price: High to Low</option>
+              <option value="year_desc">Newest Year</option>
+              <option value="views">Most Viewed</option>
+            </select>
+            <div class="view-toggle">
+              <button class="view-toggle-btn active" id="gridBtn" onclick="setView('grid')" title="Grid view">
+                <i class="fas fa-th"></i>
+              </button>
+              <button class="view-toggle-btn" id="listBtn" onclick="setView('list')" title="List view">
+                <i class="fas fa-list"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Cars Grid -->
+        <div class="cars-grid" id="carsGrid">
+          <div class="skeleton" style="height:420px;border-radius:var(--radius-lg);"></div>
+          <div class="skeleton" style="height:420px;border-radius:var(--radius-lg);"></div>
+          <div class="skeleton" style="height:420px;border-radius:var(--radius-lg);"></div>
+          <div class="skeleton" style="height:420px;border-radius:var(--radius-lg);"></div>
+          <div class="skeleton" style="height:420px;border-radius:var(--radius-lg);"></div>
+          <div class="skeleton" style="height:420px;border-radius:var(--radius-lg);"></div>
+        </div>
+
+        <!-- Pagination -->
+        <div class="pagination" id="pagination"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- COMPARE BAR -->
+<div class="compare-bar" id="compareBar">
+  <div style="display:flex;align-items:center;gap:1.5rem;">
+    <span style="font-size:0.8rem;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--text-secondary);">Compare</span>
+    <div class="compare-items" id="compareItems">
+      <div class="compare-slot" id="slot0">Slot 1</div>
+      <div class="compare-slot" id="slot1">Slot 2</div>
+      <div class="compare-slot" id="slot2">Slot 3</div>
+    </div>
+  </div>
+  <div style="display:flex;gap:0.75rem;">
+    <button onclick="clearCompare()" class="btn btn-ghost btn-sm">Clear</button>
+    <button onclick="openCompareModal()" class="btn btn-primary btn-sm" id="compareBtn" disabled>
+      Compare Now
+    </button>
+  </div>
+</div>
+
+<!-- COMPARE MODAL -->
+<div id="compareModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.9);z-index:2000;overflow-y:auto;padding:2rem;">
+  <div style="max-width:1000px;margin:0 auto;background:var(--bg-card);border-radius:var(--radius-xl);overflow:hidden;">
+    <div style="padding:2rem;border-bottom:1px solid var(--border-subtle);display:flex;justify-content:space-between;align-items:center;">
+      <h2 style="font-family:var(--font-display);font-size:1.75rem;">Vehicle Comparison</h2>
+      <button onclick="closeCompareModal()" style="color:var(--text-muted);font-size:1.5rem;">✕</button>
+    </div>
+    <div style="overflow-x:auto;">
+      <table style="width:100%;border-collapse:collapse;" id="compareTable">
+        <tbody id="compareBody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-grid">
+    <div>
+      <div class="footer-logo">MANGA AUTOS</div>
+      <div class="footer-tagline">Premium Automotive · Abuja, Nigeria</div>
+      <p class="footer-desc">Abuja's most trusted luxury automotive dealership.</p>
+      <div class="footer-socials">
+        <a href="#" class="social-btn"><i class="fab fa-instagram"></i></a>
+        <a href="#" class="social-btn"><i class="fab fa-whatsapp"></i></a>
+        <a href="#" class="social-btn"><i class="fab fa-facebook"></i></a>
+      </div>
+    </div>
+    <div>
+      <div class="footer-heading">Navigation</div>
+      <div class="footer-links">
+        <a href="/" class="footer-link">Home</a>
+        <a href="/inventory" class="footer-link">Inventory</a>
+        <a href="/about" class="footer-link">About</a>
+        <a href="/contact" class="footer-link">Contact</a>
+      </div>
+    </div>
+    <div>
+      <div class="footer-heading">Contact</div>
+      <div class="footer-contact-item"><i class="fas fa-phone footer-contact-icon"></i><span>+234 801 234 5678</span></div>
+      <div class="footer-contact-item"><i class="fas fa-envelope footer-contact-icon"></i><span>hello@mangaautos.ng</span></div>
+      <div class="footer-contact-item"><i class="fas fa-map-marker-alt footer-contact-icon"></i><span>Maitama, Abuja FCT</span></div>
+    </div>
+    <div>
+      <div class="footer-heading">Services</div>
+      <div class="footer-links">
+        <a href="#" class="footer-link">Vehicle Sourcing</a>
+        <a href="#" class="footer-link">Inspection</a>
+        <a href="#" class="footer-link">Auto Financing</a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-copy">© 2024 Manga Autos. All rights reserved.</span>
+  </div>
+</footer>
+
+<script src="/js/core.js"></script>
+<script>
+let currentPage = 1;
+let totalPages = 1;
+let currentView = 'grid';
+let searchTimeout;
+let compareList = [];
+let compareVehicles = [];
+
+// ---- LOAD VEHICLES ----
+async function loadVehicles(page = 1) {
+  const grid = document.getElementById('carsGrid');
+  grid.innerHTML = Array(6).fill(`<div class="skeleton" style="height:420px;border-radius:var(--radius-lg);"></div>`).join('');
+
+  const params = buildParams(page);
+  try {
+    const data = await API.get('/vehicles', params);
+    currentPage = data.currentPage;
+    totalPages = data.totalPages;
+
+    const count = document.getElementById('resultsCount');
+    count.innerHTML = `Showing <strong>${data.vehicles.length}</strong> of <strong>${data.total}</strong> vehicles`;
+
+    if (!data.vehicles.length) {
+      grid.innerHTML = `
+        <div class="no-results">
+          <div class="no-results-icon">🚗</div>
+          <h3 style="margin-bottom:0.75rem;color:var(--text-primary);">No vehicles found</h3>
+          <p style="color:var(--text-secondary);margin-bottom:1.5rem;">Try adjusting your filters or search term.</p>
+          <div style="display:flex;gap:1rem;justify-content:center;">
+            <button onclick="clearAllFilters()" class="btn btn-outline">Clear Filters</button>
+            <a href="https://wa.me/2348012345678?text=I'm%20looking%20for%20a%20vehicle." target="_blank" class="btn btn-whatsapp">
+              <i class="fab fa-whatsapp"></i> Request Vehicle
+            </a>
+          </div>
+        </div>`;
+      document.getElementById('pagination').innerHTML = '';
+      return;
+    }
+
+    grid.innerHTML = data.vehicles.map(v => createVehicleCard(v)).join('');
+    renderPagination(data.totalPages, data.currentPage);
+    ScrollReveal.init();
+    updateCompareBar();
+  } catch(e) {
+    grid.innerHTML = `<div class="no-results"><div class="no-results-icon">⚠</div><p style="color:var(--text-secondary);">Error loading vehicles. Please refresh.</p></div>`;
+  }
+}
+
+function buildParams(page) {
+  const brands = [...document.querySelectorAll('input[type=checkbox]:checked')].filter(c => ['Mercedes-Benz','BMW','Tesla','Range Rover','Porsche','Lexus'].includes(c.value)).map(c => c.value);
+  const conditions = [...document.querySelectorAll('input[type=checkbox]:checked')].filter(c => ['Foreign Used','Nigerian Used','Brand New'].includes(c.value)).map(c => c.value);
+  const fuels = [...document.querySelectorAll('input[type=checkbox]:checked')].filter(c => ['Petrol','Diesel','Electric','Hybrid'].includes(c.value)).map(c => c.value);
+  const trans = [...document.querySelectorAll('input[type=checkbox]:checked')].filter(c => ['Automatic','Manual'].includes(c.value)).map(c => c.value);
+  const search = document.getElementById('searchInputDesktop')?.value || document.getElementById('searchInput')?.value || '';
+  const sort = document.getElementById('sortSelect')?.value || 'latest';
+  const minPrice = document.getElementById('minPrice')?.value;
+  const maxPrice = document.getElementById('maxPrice')?.value;
+
+  return {
+    brand: brands[0] || '',
+    condition: conditions[0] || '',
+    fuelType: fuels[0] || '',
+    transmission: trans[0] || '',
+    search,
+    sort,
+    minPrice,
+    maxPrice,
+    page,
+    limit: 9,
+  };
+}
+
+function applyFilters() {
+  currentPage = 1;
+  loadVehicles(1);
+  updateActiveTags();
+}
+
+function handleSearch() {
+  clearTimeout(searchTimeout);
+  searchTimeout = setTimeout(() => applyFilters(), 350);
+}
+
+function clearAllFilters() {
+  document.querySelectorAll('.filters-sidebar input[type=checkbox]').forEach(cb => cb.checked = false);
+  document.querySelectorAll('#minPrice,#maxPrice,#minYear,#maxYear').forEach(el => el.value = '');
+  document.querySelectorAll('#searchInput,#searchInputDesktop').forEach(el => el.value = '');
+  document.getElementById('sortSelect').value = 'latest';
+  applyFilters();
+}
+
+function updateActiveTags() {
+  const tags = document.getElementById('activeFilters');
+  const checked = [...document.querySelectorAll('.filters-sidebar input[type=checkbox]:checked')];
+  tags.innerHTML = checked.map(cb => `
+    <span class="filter-tag" onclick="removeFilter('${cb.value}')">
+      ${cb.value} <span>✕</span>
+    </span>`).join('');
+}
+
+function removeFilter(value) {
+  const cb = document.querySelector(`.filters-sidebar input[value="${value}"]`);
+  if (cb) { cb.checked = false; applyFilters(); }
+}
+
+function renderPagination(total, current) {
+  const pag = document.getElementById('pagination');
+  if (total <= 1) { pag.innerHTML = ''; return; }
+  let html = '';
+  if (current > 1) html += `<button class="page-btn" onclick="goPage(${current-1})"><i class="fas fa-chevron-left"></i></button>`;
+  for (let i = 1; i <= total; i++) {
+    if (i === 1 || i === total || Math.abs(i - current) <= 1) {
+      html += `<button class="page-btn ${i===current?'active':''}" onclick="goPage(${i})">${i}</button>`;
+    } else if (Math.abs(i - current) === 2) {
+      html += `<span style="color:var(--text-muted);padding:0 0.25rem;">…</span>`;
+    }
+  }
+  if (current < total) html += `<button class="page-btn" onclick="goPage(${current+1})"><i class="fas fa-chevron-right"></i></button>`;
+  pag.innerHTML = html;
+}
+
+function goPage(p) {
+  currentPage = p;
+  loadVehicles(p);
+  window.scrollTo({ top: 300, behavior: 'smooth' });
+}
+
+function setView(view) {
+  currentView = view;
+  const layout = document.getElementById('inventoryLayout');
+  const grid = document.getElementById('carsGrid');
+  document.getElementById('gridBtn').classList.toggle('active', view === 'grid');
+  document.getElementById('listBtn').classList.toggle('active', view === 'list');
+  if (view === 'list') {
+    layout.classList.add('list-view');
+    grid.style.gridTemplateColumns = '1fr';
+  } else {
+    layout.classList.remove('list-view');
+    grid.style.gridTemplateColumns = '';
+  }
+}
+
+function toggleMobileFilters() {
+  document.getElementById('filtersSidebar').classList.toggle('mobile-open');
+}
+
+// ---- COMPARE ----
+const _origAdd = Comparison.add.bind(Comparison);
+Comparison.add = function(id) {
+  const result = _origAdd(id);
+  if (result) {
+    compareList = Comparison.get();
+    updateCompareBar();
+  }
+  return result;
+};
+
+async function updateCompareBar() {
+  compareList = Comparison.get();
+  const bar = document.getElementById('compareBar');
+  bar.classList.toggle('active', compareList.length > 0);
+
+  for (let i = 0; i < 3; i++) {
+    const slot = document.getElementById(`slot${i}`);
+    const id = compareList[i];
+    if (id) {
+      try {
+        const v = await API.get(`/vehicles/${id}`);
+        slot.className = 'compare-slot filled';
+        slot.innerHTML = `
+          <span class="remove-compare" onclick="removeFromCompare('${id}')">✕</span>
+          <div style="font-size:0.6rem;color:var(--gold);text-transform:uppercase;">${v.brand}</div>
+          <div style="font-size:0.65rem;text-align:center;">${v.model}</div>
+        `;
+      } catch(e) {}
+    } else {
+      slot.className = 'compare-slot';
+      slot.innerHTML = `Slot ${i+1}`;
+    }
+  }
+  document.getElementById('compareBtn').disabled = compareList.length < 2;
+}
+
+function removeFromCompare(id) {
+  Comparison.remove(id);
+  compareList = Comparison.get();
+  updateCompareBar();
+}
+
+function clearCompare() {
+  Comparison.clear();
+  compareList = [];
+  updateCompareBar();
+}
+
+async function openCompareModal() {
+  const ids = Comparison.get();
+  if (ids.length < 2) return;
+  try {
+    const vehicles = await Promise.all(ids.map(id => API.get(`/vehicles/${id}`)));
+    compareVehicles = vehicles;
+    const fields = [
+      { key: 'brand', label: 'Brand' },
+      { key: 'model', label: 'Model' },
+      { key: 'year', label: 'Year' },
+      { key: 'price', label: 'Price', format: v => Utils.formatPrice(v) },
+      { key: 'mileage', label: 'Mileage', format: v => Utils.formatMileage(v) },
+      { key: 'engine', label: 'Engine' },
+      { key: 'horsepower', label: 'Horsepower', format: v => `${v} hp` },
+      { key: 'transmission', label: 'Transmission' },
+      { key: 'fuelType', label: 'Fuel Type' },
+      { key: 'drivetrain', label: 'Drivetrain' },
+      { key: 'exteriorColor', label: 'Exterior Color' },
+      { key: 'condition', label: 'Condition' },
+    ];
+
+    let html = `<tr style="background:var(--bg-elevated);">
+      <td style="padding:1rem;font-size:0.7rem;font-weight:700;letter-spacing:0.1em;color:var(--gold);text-transform:uppercase;min-width:140px;">Specification</td>
+      ${vehicles.map(v => `<td style="padding:1rem;text-align:center;border-left:1px solid var(--border-subtle);">
+        <div style="font-family:var(--font-display);font-size:1.1rem;color:var(--text-primary);">${v.brand}</div>
+        <div style="font-size:0.8rem;color:var(--text-secondary);">${v.model} ${v.year}</div>
+        <div style="font-family:var(--font-display);font-size:1.25rem;color:var(--gold);margin-top:0.25rem;">${Utils.formatPrice(v.price)}</div>
+        <a href="/details?id=${v.id}" class="btn btn-primary btn-sm" style="margin-top:0.75rem;">View Details</a>
+      </td>`).join('')}
+    </tr>`;
+
+    fields.forEach(field => {
+      html += `<tr style="border-top:1px solid var(--border-subtle);">
+        <td style="padding:0.875rem 1rem;font-size:0.8rem;color:var(--text-secondary);font-weight:500;">${field.label}</td>
+        ${vehicles.map(v => {
+          const val = field.format ? field.format(v[field.key]) : v[field.key];
+          return `<td style="padding:0.875rem 1rem;text-align:center;border-left:1px solid var(--border-subtle);font-size:0.875rem;color:var(--text-primary);">${val || '—'}</td>`;
+        }).join('')}
+      </tr>`;
+    });
+
+    document.getElementById('compareBody').innerHTML = html;
+    document.getElementById('compareModal').style.display = 'block';
+    document.body.style.overflow = 'hidden';
+  } catch(e) {
+    Toast.show('Error loading comparison data.', 'error');
+  }
+}
+
+function closeCompareModal() {
+  document.getElementById('compareModal').style.display = 'none';
+  document.body.style.overflow = '';
+}
+
+// Check URL params for pre-filters
+const urlParams = new URLSearchParams(window.location.search);
+if (urlParams.get('brand')) {
+  const cb = document.querySelector(`.filters-sidebar input[value="${urlParams.get('brand')}"]`);
+  if (cb) cb.checked = true;
+}
+if (urlParams.get('search')) {
+  const si = document.getElementById('searchInputDesktop');
+  if (si) si.value = urlParams.get('search');
+}
+
+loadVehicles(1);
+updateCompareBar();
+</script>
+</body>
+</html>

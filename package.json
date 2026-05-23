@@ -1,0 +1,22 @@
+{
+  "name": "manga-autos",
+  "version": "1.0.0",
+  "description": "Premium automotive marketplace platform for Manga Autos, Abuja Nigeria",
+  "main": "server/server.js",
+  "scripts": {
+    "start": "node server/server.js",
+    "dev": "nodemon server/server.js"
+  },
+  "keywords": ["automotive", "marketplace", "nigeria", "abuja", "luxury-cars"],
+  "author": "Manga Autos",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
