@@ -289,5 +289,33 @@
     "featured": false,
     "views": 2341,
     "createdAt": "2024-07-15T10:00:00Z"
+  },
+  {
+    "id": "v1779550986489",
+    "name": "Mercedes-Benz GLE 450",
+    "brand": "Mercedes-Benz",
+    "model": "GLE 450",
+    "year": 2024,
+    "price": 55555555555,
+    "mileage": 1500,
+    "condition": "Brand New",
+    "transmission": "Automatic",
+    "fuelType": "Diesel",
+    "engine": "3.0l",
+    "horsepower": 444,
+    "drivetrain": "RWD",
+    "location": "Abuja",
+    "exteriorColor": "JJJ",
+    "interiorColor": "HHHH",
+    "description": "HGGHJGXDXCHJHKFDRDFKJHKJJFGDDHYJB",
+    "features": [
+      "FFJHGCDTYFJGKJ"
+    ],
+    "images": [
+      "https://res.cloudinary.com/da7jzmy2g/image/upload/v1779085063/toyota_h67m9v.jpg"
+    ],
+    "featured": true,
+    "views": 0,
+    "createdAt": "2026-05-23T15:43:06.490Z"
   }
 ]

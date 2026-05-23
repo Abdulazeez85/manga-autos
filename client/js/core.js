@@ -15,7 +15,13 @@ const CONFIG = {
 const API = {
   async get(endpoint, params = {}) {
     const url = new URL(`${CONFIG.API_BASE}${endpoint}`, window.location.origin);
-    Object.entries(params).forEach(([k, v]) => { if (v) url.searchParams.append(k, v); });
+    Object.entries(params).forEach(([k, v]) => {
+      if (Array.isArray(v)) {
+        v.filter(item => item !== undefined && item !== null && item !== '').forEach(item => url.searchParams.append(k, item));
+      } else if (v !== undefined && v !== null && v !== '') {
+        url.searchParams.append(k, v);
+      }
+    });
     const res = await fetch(url);
     if (!res.ok) throw new Error(`API Error: ${res.status}`);
     return res.json();

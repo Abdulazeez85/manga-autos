@@ -499,16 +499,20 @@ function buildParams(page) {
   const sort = document.getElementById('sortSelect')?.value || 'latest';
   const minPrice = document.getElementById('minPrice')?.value;
   const maxPrice = document.getElementById('maxPrice')?.value;
+  const minYear = document.getElementById('minYear')?.value;
+  const maxYear = document.getElementById('maxYear')?.value;
 
   return {
-    brand: brands[0] || '',
-    condition: conditions[0] || '',
-    fuelType: fuels[0] || '',
-    transmission: trans[0] || '',
+    brand: brands,
+    condition: conditions,
+    fuelType: fuels,
+    transmission: trans,
     search,
     sort,
     minPrice,
     maxPrice,
+    minYear,
+    maxYear,
     page,
     limit: 9,
   };
