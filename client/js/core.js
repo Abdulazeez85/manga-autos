@@ -13,6 +13,22 @@ const CONFIG = {
 
 // ===================== API LAYER =====================
 const API = {
+  authKey: 'manga-admin-token',
+
+  getAuthToken() {
+    return localStorage.getItem(this.authKey) || '';
+  },
+
+  setAuthToken(token) {
+    if (token) localStorage.setItem(this.authKey, token);
+    else localStorage.removeItem(this.authKey);
+  },
+
+  getAuthHeaders() {
+    const token = this.getAuthToken();
+    return token ? { Authorization: `Bearer ${token}` } : {};
+  },
+
   async get(endpoint, params = {}) {
     const url = new URL(`${CONFIG.API_BASE}${endpoint}`, window.location.origin);
     Object.entries(params).forEach(([k, v]) => {
@@ -22,7 +38,7 @@ const API = {
         url.searchParams.append(k, v);
       }
     });
-    const res = await fetch(url);
+    const res = await fetch(url, { headers: this.getAuthHeaders() });
     if (!res.ok) throw new Error(`API Error: ${res.status}`);
     return res.json();
   },
@@ -30,8 +46,27 @@ const API = {
   async post(endpoint, data = {}) {
     const res = await fetch(`${CONFIG.API_BASE}${endpoint}`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', ...this.getAuthHeaders() },
       body: JSON.stringify(data),
+    });
+    if (!res.ok) throw new Error(`API Error: ${res.status}`);
+    return res.json();
+  },
+
+  async put(endpoint, data = {}) {
+    const res = await fetch(`${CONFIG.API_BASE}${endpoint}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', ...this.getAuthHeaders() },
+      body: JSON.stringify(data),
+    });
+    if (!res.ok) throw new Error(`API Error: ${res.status}`);
+    return res.json();
+  },
+
+  async delete(endpoint) {
+    const res = await fetch(`${CONFIG.API_BASE}${endpoint}`, {
+      method: 'DELETE',
+      headers: this.getAuthHeaders(),
     });
     if (!res.ok) throw new Error(`API Error: ${res.status}`);
     return res.json();
@@ -359,10 +394,15 @@ const Calculator = {
 function createVehicleCard(vehicle) {
   const isWishlisted = Wishlist.has(vehicle.id);
   const price = Utils.formatPrice(vehicle.price);
-
-  return `
-    <article class="car-card reveal" data-id="${vehicle.id}">
-      <div class="car-card-image">
+  const firstImage = Array.isArray(vehicle.images) && vehicle.images.length ? vehicle.images[0].trim() : '';
+  const imageMarkup = firstImage ? `
+        <img
+          class="car-card-img"
+          src="${firstImage}"
+          alt="${vehicle.brand} ${vehicle.model}"
+          onerror="this.style.display='none'"
+        />
+      ` : `
         <div class="car-img-placeholder">
           <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M8 40h48M14 40l6-16h24l6 16" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
@@ -372,6 +412,12 @@ function createVehicleCard(vehicle) {
           </svg>
           <span>${vehicle.brand}</span>
         </div>
+      `;
+
+  return `
+    <article class="car-card reveal" data-id="${vehicle.id}">
+      <div class="car-card-image">
+        ${imageMarkup}
         <div class="car-card-overlay"></div>
         <div class="car-badge">
           ${vehicle.featured ? '<span class="badge badge-gold">✦ Featured</span>' : ''}

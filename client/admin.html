@@ -240,7 +240,10 @@
     <div style="margin-top:auto;padding-top:2rem;">
       <div style="padding:1rem;background:rgba(201,168,76,0.07);border:1px solid rgba(201,168,76,0.15);border-radius:var(--radius-md);">
         <div style="font-size:0.65rem;color:var(--gold);font-weight:700;letter-spacing:0.1em;margin-bottom:0.25rem;">ADMIN SESSION</div>
-        <div style="font-size:0.8rem;color:var(--text-secondary);">Manga Autos Admin</div>
+        <div style="font-size:0.8rem;color:var(--text-secondary);margin-bottom:1rem;">Enter your admin token to enable protected actions.</div>
+        <input id="adminTokenInput" type="password" placeholder="ADMIN_TOKEN" style="width:100%;padding:0.9rem 0.85rem;border:1px solid var(--border-subtle);border-radius:var(--radius-md);background:var(--bg-primary);color:var(--text-primary);" />
+        <button class="btn btn-primary btn-sm" style="width:100%;margin-top:0.75rem;justify-content:center;" onclick="saveAdminToken()">Save Token</button>
+        <div id="adminTokenStatus" style="font-size:0.75rem;color:var(--text-muted);margin-top:0.75rem;min-height:1.5rem;"></div>
       </div>
     </div>
   </aside>
@@ -686,12 +689,7 @@ document.getElementById('vehicleForm').addEventListener('submit', async (e) => {
 
   try {
     if (isEditMode && id) {
-      const response = await fetch(`/api/vehicles/${id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
-      });
-      if (!response.ok) throw new Error('Save failed');
+      await API.put(`/vehicles/${id}`, data);
       Toast.show('Vehicle updated successfully!', 'success');
     } else {
       await API.post('/vehicles', data);
@@ -725,7 +723,7 @@ function closeDeleteModal() {
 async function confirmDelete() {
   if (!deleteTargetId) return;
   try {
-    await fetch(`/api/vehicles/${deleteTargetId}`, { method: 'DELETE' });
+    await API.delete(`/vehicles/${deleteTargetId}`);
     Toast.show('Vehicle deleted.', 'success');
     closeDeleteModal();
     loadAdminVehicles();
@@ -735,8 +733,29 @@ async function confirmDelete() {
   }
 }
 
+function setAdminTokenStatus(message) {
+  const status = document.getElementById('adminTokenStatus');
+  if (status) status.textContent = message;
+}
+
+function initAdminToken() {
+  const token = API.getAuthToken();
+  const input = document.getElementById('adminTokenInput');
+  if (input) input.value = token;
+  setAdminTokenStatus(token ? 'Admin token loaded from browser storage.' : 'No admin token set yet.');
+}
+
+function saveAdminToken() {
+  const input = document.getElementById('adminTokenInput');
+  if (!input) return;
+  const token = input.value.trim();
+  API.setAuthToken(token);
+  setAdminTokenStatus(token ? 'Admin token saved. Protected actions are enabled.' : 'Admin token cleared. Protected actions are disabled.');
+}
+
 // Init
 loadDashboardStats();
+initAdminToken();
 </script>
 </body>
 </html>

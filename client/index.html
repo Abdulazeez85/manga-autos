@@ -72,17 +72,17 @@
 </div>
 
 <!-- HERO -->
-<section class="hero" style="position:relative;min-height:100vh;display:flex;align-items:center;">
-  <div style="position:absolute;inset:0;z-index:0;overflow:hidden;">
-    <div style="position:absolute;inset:0;background:linear-gradient(135deg,#050505 0%,#0f0d05 50%,#080808 100%);"></div>
-    <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 75% 50%,rgba(201,168,76,0.07) 0%,transparent 55%),radial-gradient(ellipse at 20% 80%,rgba(201,168,76,0.04) 0%,transparent 40%);"></div>
-    <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(201,168,76,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(201,168,76,0.025) 1px,transparent 1px);background-size:80px 80px;"></div>
-    <svg style="position:absolute;right:-5%;top:50%;transform:translateY(-50%);width:55%;height:90%;opacity:0.04;" viewBox="0 0 600 700" fill="none">
+<section class="hero">
+  <div class="hero-bg">
+    <div class="hero-bg-layer hero-bg-layer--base"></div>
+    <div class="hero-bg-layer hero-bg-layer--glow"></div>
+    <div class="hero-bg-layer hero-bg-layer--grid"></div>
+    <svg class="hero-bg-ellipse" viewBox="0 0 600 700" fill="none">
       <ellipse cx="550" cy="350" rx="380" ry="340" stroke="#C9A84C" stroke-width="1.5"/>
       <ellipse cx="550" cy="350" rx="300" ry="260" stroke="#C9A84C" stroke-width="1"/>
       <ellipse cx="550" cy="350" rx="220" ry="180" stroke="#C9A84C" stroke-width="0.5"/>
     </svg>
-    <svg style="position:absolute;right:5%;bottom:10%;width:42%;opacity:0.06;" viewBox="0 0 800 300" fill="none">
+    <svg class="hero-bg-curve" viewBox="0 0 800 300" fill="none">
       <path d="M50 200 L120 200 L140 140 L200 100 L380 90 L480 100 L540 140 L680 140 L740 200 L750 200" stroke="#C9A84C" stroke-width="2.5" stroke-linejoin="round"/>
       <circle cx="180" cy="210" r="42" stroke="#C9A84C" stroke-width="2"/>
       <circle cx="180" cy="210" r="20" stroke="#C9A84C" stroke-width="1"/>
@@ -90,7 +90,7 @@
       <circle cx="620" cy="210" r="20" stroke="#C9A84C" stroke-width="1"/>
     </svg>
   </div>
-  <div style="position:relative;z-index:3;width:100%;max-width:var(--max-width);margin:0 auto;padding:calc(var(--nav-height) + 5rem) clamp(1.5rem,5vw,3rem) 5rem;">
+  <div class="hero-content">
     <div style="max-width:680px;">
       <div class="hero-badge" style="animation:fadeInDown 0.8s ease both;"><span></span> Abuja's #1 Premium Dealership · Est. 2018</div>
       <h1 class="hero-title" style="animation:fadeInUp 0.9s ease 0.1s both;">Drive<br><em>Beyond</em><br>Ordinary.</h1>
